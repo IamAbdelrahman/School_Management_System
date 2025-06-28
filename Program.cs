@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using School_Management_System.Models;
+using School_Management_System.Repositories.Implementations;
+using School_Management_System.Repositories.Interfaces;
 
 namespace School_Management_System
 {
@@ -13,6 +15,11 @@ namespace School_Management_System
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<ITIContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("iticonfig")));
+
+            builder.Services.AddScoped<IClassRepository, ClassRepository>();
+            builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -1,0 +1,59 @@
+﻿@model School_Management_System.ViewModel.ClassViewModel
+
+@{
+    ViewData["Title"] = "Class Details";
+}
+
+<h2>Class Details</h2>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Class Info</h4>
+        <dl class="row">
+            <dt class="col-sm-3">Class Name</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+
+            <dt class="col-sm-3">Grade Level</dt>
+            <dd class="col-sm-9">@Model.GradeLevel</dd>
+
+            <dt class="col-sm-3">Assigned Teacher</dt>
+            <dd class="col-sm-9">
+                @Model.TeacherName
+                @if (!string.IsNullOrEmpty(Model.TeacherRole))
+                {
+                    <span class="text-muted">(@Model.TeacherRole)</span>
+                }
+            </dd>
+        </dl>
+
+        <h5 class="mt-4">Students</h5>
+        @if (Model.Students != null && Model.Students.Any())
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var student in Model.Students)
+                    {
+                        <tr>
+                            <td>@student.Name</td>
+                            <td>@student.Age</td>
+                            <td>@student.Gender</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No students assigned to this class.</p>
+        }
+
+        <a asp-action="Index" class="btn btn-secondary mt-3">Back to List</a>
+    </div>
+</div>
