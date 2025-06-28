@@ -7,13 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Courses\" />
     <Folder Include="Views\Classes\" />
     <Folder Include="Views\Exams\" />
     <Folder Include="Views\Enrollments\" />
     <Folder Include="Views\Departments\" />
     <Folder Include="Views\Teachers\" />
     <Folder Include="Views\Students\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +22,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
   </ItemGroup>
 
 </Project>
