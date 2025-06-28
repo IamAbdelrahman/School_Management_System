@@ -16,8 +16,15 @@ namespace School_Management_System
             builder.Services.AddDbContext<ITIContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("iticonfig")));
 
+ 
+            builder.Services.AddScoped<IClassRepository, ClassRepository>();
+            builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
+
+
+
             // Register the DbContext with dependency injection
             builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

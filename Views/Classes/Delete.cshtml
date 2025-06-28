@@ -1,0 +1,32 @@
+﻿@model School_Management_System.ViewModel.ClassViewModel
+
+@{
+    ViewData["Title"] = "Delete Class";
+}
+
+<h2>Delete Class</h2>
+
+<div class="alert alert-danger">
+    Are you sure you want to delete this class?
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Class Name</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+
+            <dt class="col-sm-3">Grade Level</dt>
+            <dd class="col-sm-9">@Model.GradeLevel</dd>
+
+            <dt class="col-sm-3">Student Count</dt>
+            <dd class="col-sm-9">@Model.Students?.Count</dd>
+        </dl>
+
+        <form asp-action="Delete" asp-route-id="@Model.ClassID" method="post">
+            <input type="hidden" asp-for="ClassID" />
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
