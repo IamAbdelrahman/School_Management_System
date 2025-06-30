@@ -42,5 +42,25 @@ namespace School_Management_System.Repositories.Implementations
         {
             _context.SaveChanges();
         }
+        public IEnumerable<Class> GetPagedAndFiltered(string? searchTerm, int pageNumber, int pageSize, out int totalCount)
+        {
+            var query = _context.Classes
+                .Include(c => c.Teacher)
+                .Include(c => c.Students)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                query = query.Where(c => c.Name.Contains(searchTerm));
+            }
+
+            totalCount = query.Count();
+
+            return query
+                .OrderBy(c => c.Name)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+        }
     }
 }
