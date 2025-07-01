@@ -7,6 +7,7 @@
         void Add(T entity);
         void Update(T entity);
         void Delete(int id);
+        public void ReseedTable(string tableName, int seedValue = 0);
 
         public void SaveChanges();
     }
