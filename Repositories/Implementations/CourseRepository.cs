@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Diagnostics;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using School_Management_System.Models;
 using School_Management_System.Repositories.Interfaces;
 
@@ -39,28 +40,35 @@ namespace School_Management_System.Repositories.Implementations
 
         IEnumerable<Course> ICourseRepository.GetCoursesByClassId(int classId)
         {
-            throw new NotImplementedException();
+            //var courses = db.Courses
+            //    .Include(c => c.Enrollments)
+            //    .ThenInclude(e => e.Student)
+            //    .Where(c => c.Enrollments.Any(e => e.ClassID == classId))
+            //    .ToList();
+            //var courses = db.Courses.Include(c => c.Teacher.)
+            throw new NotImplementedException("Method GetCoursesByClassId is not implemented yet.");
         }
 
         IEnumerable<Course> ICourseRepository.GetCoursesByDepartmentId(int departmentId)
         {
-            throw new NotImplementedException();
+            var courses = db.Courses
+                .Include(c => c.Department)
+                .Where(c => c.DepartmentID == departmentId)
+                .ToList();
+            if (courses == null || !courses.Any())
+                return Enumerable.Empty<Course>();
+            return courses;
         }
 
         IEnumerable<Course> ICourseRepository.GetCoursesByName(string name)
         {
-            throw new NotImplementedException();
+            var courses = db.Courses.Where(c => c.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+            if (courses == null || !courses.Any())
+                return Enumerable.Empty<Course>();
+            return courses;
         }
 
-        IEnumerable<Course> ICourseRepository.GetCoursesByStudentId(int studentId)
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerable<Course> ICourseRepository.GetCoursesBySubjectId(int subjectId)
-        {
-            throw new NotImplementedException();
-        }
 
         IEnumerable<Course> ICourseRepository.GetCoursesByTeacherId(int teacherId)
         {
@@ -78,6 +86,16 @@ namespace School_Management_System.Repositories.Implementations
             if (entity.CourseID <= 0) throw new ArgumentException("Invalid course ID.", nameof(entity.CourseID));
             db.Update(entity);
             db.SaveChanges();
+        }
+
+        public IEnumerable<Course> GetCoursesByStudentId(int studentId)
+        {
+            throw new NotImplementedException();
+        }
+        public void ReseedTable(string tableName, int seedValue = 0)
+        {
+            var sql = $"DBCC CHECKIDENT ('{tableName}', RESEED, {seedValue})";
+            db.Database.ExecuteSqlRaw(sql);
         }
     }
 }
