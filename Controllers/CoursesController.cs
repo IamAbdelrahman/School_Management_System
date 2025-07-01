@@ -25,5 +25,38 @@ namespace School_Management_System.Controllers
             }).ToList();
             return View(courseVM);
         }
+        public IActionResult Details(int id)
+        {
+            var course = courseRepo.GetById(id);
+            if (course == null)
+            {
+                return NotFound();
+            }
+            var courseVM = new CourseViewModel
+            {
+                CourseID = course.CourseID,
+                Name = course.Name,
+                Description = course.Description,
+                TeacherName = course.Teacher?.Name, // Assuming Teacher is a navigation property
+                DepartmentName = course.Department?.Name // Assuming Department is a navigation property
+            };
+            return View(courseVM);
+        }
+        public IActionResult Reseed()
+        {
+            try
+            {
+                courseRepo.ReseedTable("Courses", 11);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return Content("Error: " + ex.Message);
+            }
+        }
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }
