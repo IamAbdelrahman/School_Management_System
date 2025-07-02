@@ -19,9 +19,10 @@ namespace School_Management_System.Controllers
         }
 
         //-------------------------Index--------------------//
-        public IActionResult Index()
+        public IActionResult Index(string? searchTerm, int pageNumber = 1, int pageSize = 5)
         {
-            var classes = _classRepo.GetAll();
+            var classes = _classRepo.GetPagedAndFiltered(searchTerm, pageNumber, pageSize, out int totalCount);
+
             var viewModels = classes.Select(c => new ClassViewModel
             {
                 ClassID = c.ClassID,
@@ -31,6 +32,11 @@ namespace School_Management_System.Controllers
                 TeacherName = c.Teacher?.Name,
                 Students = c.Students.ToList()
             }).ToList();
+
+            ViewBag.SearchTerm = searchTerm;
+            ViewBag.PageNumber = pageNumber;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
             return View(viewModels);
         }
 
@@ -65,6 +71,7 @@ namespace School_Management_System.Controllers
             };
             return View(viewModel);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(ClassViewModel model)
@@ -76,13 +83,19 @@ namespace School_Management_System.Controllers
                     .ToList();
                 return View(model);
             }
+
+            var maxId = _classRepo.GetAll().Any()
+                ? _classRepo.GetAll().Max(c => c.ClassID)
+                : 0;
+
             var newClass = new Class
             {
-                ClassID = model.ClassID,
+                ClassID = maxId + 1,
                 Name = model.Name!,
                 GradeLevel = model.GradeLevel,
                 TeacherID = model.TeacherID
             };
+
             _classRepo.Add(newClass);
             _classRepo.Save();
             return RedirectToAction(nameof(Index));
@@ -153,8 +166,15 @@ namespace School_Management_System.Controllers
             var cls = _classRepo.GetById(id);
             if (cls == null)
                 return NotFound();
+            if (cls.Students.Any())
+            {
+                TempData["Error"] = "Cannot delete class because it has assigned students.";
+                return RedirectToAction(nameof(Delete), new { id });
+            }
+
             _classRepo.Delete(id);
             _classRepo.Save();
+            TempData["Success"] = "Class deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
     }

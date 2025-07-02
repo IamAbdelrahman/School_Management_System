@@ -10,5 +10,6 @@ namespace School_Management_System.Repositories.Interfaces
         void Update(Class cls);
         void Delete(int id);
         void Save();
+        IEnumerable<Class> GetPagedAndFiltered(string? searchTerm, int pageNumber, int pageSize, out int totalCount);
     }
 }

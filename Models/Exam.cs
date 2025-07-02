@@ -30,4 +30,6 @@ public partial class Exam
 
     [InverseProperty("Exam")]
     public virtual ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
+    public ICollection<Question> Questions { get; set; }
+
 }
