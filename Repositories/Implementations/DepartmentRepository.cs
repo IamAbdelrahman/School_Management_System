@@ -45,5 +45,10 @@ namespace School_Management_System.Repositories.Implementations
         {
             throw new NotImplementedException();
         }
+
+        public void ReseedTable(string tableName, int seedValue = 0)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

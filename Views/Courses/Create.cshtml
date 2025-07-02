@@ -1,0 +1,49 @@
+﻿@using School_Management_System.ViewModel
+
+@model CourseViewModel
+@{
+	ViewData["Title"] = "Add Course";
+}
+
+<h1>Add Course</h1>
+
+<form asp-action="SaveCrs" asp-controller="Course" method="post" enctype="multipart/form-data">
+
+	<div class="mb-3">
+		<label for="CourseName" class="form-label">Course Name</label>
+		<input type="text" name="Name" id="Name" value="@Model?.Name" class="form-control" required />
+	</div>
+
+	<div class="mb-3">
+		<label for="Description" class="form-label">Description</label>
+		<textarea name="Description" id="Description" class="form-control" required>@Model?.Description</textarea>
+	</div>
+
+	<div class="mb-3">
+    <label for="TeacherName" class="form-label">Teacher Name</label>
+	<select name="TeacherName" id="TeacherName" class="form-control" required>
+		<option value="">Select Teacher</option>
+		@foreach (var teacher in ViewBag.Teachers)
+		{
+			<option value="@teacher.TeacherID">@teacher.Name</option>
+        }
+    </select>
+	</div>
+
+	<div class="mb-3">
+	<label for="DepartmentName" class="form-label">Department ID</label>
+	<select name="DepartmentId" id="DepartmentId" class="form-control" required>
+		<option value="">Select Department</option>
+		@foreach (var dept in ViewBag.Departments)
+		{
+				<option value="@dept.DepartmentID">@dept.Name</option>
+		}
+	</select>
+	</div>
+
+	<button type="submit" class="btn btn-primary">Submit</button>
+	<a href="/Courses/Index" class="btn btn-secondary mb-3">Back to List</a>
+
+</form>
+
+
