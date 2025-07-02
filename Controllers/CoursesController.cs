@@ -10,7 +10,7 @@ namespace School_Management_System.Controllers
     {
         ICourseRepository courseRepo;
         ITeacherRepository teacherRepo;
-        //IDepartmentRepository departmentRepo;
+        IDepartmentRepository departmentRepo;
         public CoursesController(ICourseRepository courseRepository)
         {
             this.courseRepo = courseRepository;
@@ -59,12 +59,8 @@ namespace School_Management_System.Controllers
         }
         public IActionResult Create()
         {
-            //ViewBag.Teachers = teacherRepo.GetAll().Select(t => new { t.TeacherID, t.Name }).ToList();
-            //ViewBag.Departments = departmentRepo.GetAll().Select(d => new { d.DepartmentID, d.Name }).ToList();
-            var teachers = new { TeacherID = 0, Name = "Select Teacher" };
-            var departments = new { DepartmentID = 0, Name = "Select Department" };
-            ViewBag.Teachers = new List<object> { teachers }; // Assuming you have a method to get all teachers
-            ViewBag.Departments = new List<object> { departments }; // Assuming you have a method to get all departments
+            ViewBag.Teachers = teacherRepo.GetAll().Select(t => new { t.TeacherID, t.Name }).ToList();
+            ViewBag.Departments = departmentRepo.GetAll().Select(d => new { d.DepartmentID, d.Name }).ToList();
             return View();
         }
         public IActionResult Edit(int id)

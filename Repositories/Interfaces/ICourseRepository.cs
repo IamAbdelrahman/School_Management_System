@@ -9,6 +9,5 @@ namespace School_Management_System.Repositories.Interfaces
         public IEnumerable<Course> GetCoursesByStudentId(int studentId);
         public IEnumerable<Course> GetCoursesByClassId(int classId);
         public IEnumerable<Course> GetCoursesByDepartmentId(int departmentId);
-
     }
 }
