@@ -19,6 +19,7 @@ namespace School_Management_System
  
             builder.Services.AddScoped<IClassRepository, ClassRepository>();
             builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 
 
 
