@@ -2,12 +2,14 @@
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using School_Management_System.Models;
 using School_Management_System.Repositories.Interfaces;
-
+using System.Diagnostics.Eventing.Reader;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using FuzzySharp;
 namespace School_Management_System.Repositories.Implementations
 {
     public class CourseRepository : ICourseRepository
     {
-        private  ITIContext db { get; set; }
+        private ITIContext db { get; set; }
         public CourseRepository(ITIContext dbcontext)
         {
             db = dbcontext;
@@ -40,13 +42,15 @@ namespace School_Management_System.Repositories.Implementations
 
         IEnumerable<Course> ICourseRepository.GetCoursesByClassId(int classId)
         {
-            //var courses = db.Courses
-            //    .Include(c => c.Enrollments)
-            //    .ThenInclude(e => e.Student)
-            //    .Where(c => c.Enrollments.Any(e => e.ClassID == classId))
-            //    .ToList();
-            //var courses = db.Courses.Include(c => c.Teacher.)
-            throw new NotImplementedException("Method GetCoursesByClassId is not implemented yet.");
+            var courses = from course in db.Courses
+                          join enrollment in db.Enrollments on course.CourseID equals enrollment.CourseID
+                          join student in db.Students on enrollment.StudentID equals student.StudentID
+                          where student.ClassID == classId
+                          select course;
+
+            if (courses == null || !courses.Any())
+                return Enumerable.Empty<Course>();
+            return courses.ToList();
         }
 
         IEnumerable<Course> ICourseRepository.GetCoursesByDepartmentId(int departmentId)
@@ -60,19 +64,29 @@ namespace School_Management_System.Repositories.Implementations
             return courses;
         }
 
-        IEnumerable<Course> ICourseRepository.GetCoursesByName(string name)
+        IEnumerable<Course> ICourseRepository.GetCoursesByName(string keyword)
         {
-            var courses = db.Courses.Where(c => c.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
+            var courses = db.Courses.ToList();
+
+            var matchedCourses = courses
+                .Where(c => Fuzz.Ratio(c.Name.ToLower(), keyword.ToLower()) >= 80)
                 .ToList();
-            if (courses == null || !courses.Any())
+
+            if (!matchedCourses.Any())
                 return Enumerable.Empty<Course>();
-            return courses;
+
+            return matchedCourses;
         }
 
 
         IEnumerable<Course> ICourseRepository.GetCoursesByTeacherId(int teacherId)
         {
-            throw new NotImplementedException();
+            var courses = db.Courses
+                .Include(c => c.Teacher)
+                .Where(c => c.TeacherID == teacherId)
+                .ToList();
+
+            return courses.Any() ? courses : Enumerable.Empty<Course>();
         }
 
         void IRepository<Course>.SaveChanges()
