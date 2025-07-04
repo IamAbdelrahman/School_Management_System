@@ -14,6 +14,7 @@ public partial class Department
     [Key]
     public int DepartmentID { get; set; }
 
+    [Required(ErrorMessage = "Department name is required")]
     [StringLength(30)]
     public string Name { get; set; }
 
@@ -23,3 +24,5 @@ public partial class Department
     [InverseProperty("Department")]
     public virtual ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
 }
+
+

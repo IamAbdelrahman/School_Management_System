@@ -14,22 +14,25 @@ public partial class Teacher
     [Key]
     public int TeacherID { get; set; }
 
+    [Required(ErrorMessage = "Teacher name is required")]
     [StringLength(30)]
     public string Name { get; set; }
 
+    [Required]
     public DateOnly? HireDate { get; set; }
-
+    [Required]
     public int? DepartmentID { get; set; }
 
-    [StringLength(30)]
+    [Required(ErrorMessage = "Phone number is required")]
+    [Phone]
     public string Phone { get; set; }
 
-    [StringLength(50)]
+    [EmailAddress]
     public string Email { get; set; }
 
     public int? ExamID { get; set; }
 
-    [StringLength(50)]
+    [Required]
     public string Role { get; set; }
 
     [InverseProperty("Teacher")]
