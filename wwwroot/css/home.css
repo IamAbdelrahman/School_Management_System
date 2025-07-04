@@ -1,0 +1,80 @@
+﻿body {
+    background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.hero {
+    padding: 100px 20px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+    .hero h1 {
+        font-size: 4rem;
+        font-weight: bold;
+        animation: slideDown 1s ease-out;
+    }
+
+    .hero p {
+        font-size: 1.5rem;
+        animation: fadeIn 2s ease-in;
+    }
+
+.btn-primary {
+    background-color: #1e3c72;
+    border-color: #1e3c72;
+}
+
+.floating-circles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: 0;
+}
+
+    .floating-circles span {
+        position: absolute;
+        display: block;
+        width: 30px;
+        height: 30px;
+        background: rgba(255, 255, 255, 0.05);
+        animation: float 20s linear infinite;
+        border-radius: 50%;
+    }
+
+@keyframes float {
+    0% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    100% {
+        transform: translateY(-1000px) rotate(360deg);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

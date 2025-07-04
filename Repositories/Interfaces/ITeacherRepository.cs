@@ -2,9 +2,11 @@
 
 namespace School_Management_System.Repositories.Interfaces
 {
-    public interface ITeacherRepository
+    public interface ITeacherRepository:IRepository<Teacher>
     {
-        IEnumerable<Teacher> GetAll();
-        Teacher? GetById(int id);
+        public IEnumerable<Teacher> GetTeachersByDepartmentId(int departmentId);
+        public IEnumerable<Teacher> GetTeachersByName(string name);
+        public IEnumerable<Teacher> GetTeachersByRole(string role);
+
     }
 }

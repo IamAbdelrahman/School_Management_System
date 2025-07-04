@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-
 namespace School_Management_System.Models;
 
 [Table("Course")]
@@ -14,14 +13,17 @@ public partial class Course
     [Key]
     public int CourseID { get; set; }
 
-    [StringLength(30)]
+    [Required(ErrorMessage = "Course name is required")]
+    [StringLength(30, MinimumLength = 3, ErrorMessage = "Course name must be between 3 and 100 characters")] 
     public string Name { get; set; }
 
-    [StringLength(50)]
+    [Required(ErrorMessage = "Description is required")]
+    [StringLength(100)]
     public string Description { get; set; }
 
+    [Required(ErrorMessage = "You must assign a teacher")]
     public int? TeacherID { get; set; }
-
+    [Required(ErrorMessage = "You must choose a department")]
     public int? DepartmentID { get; set; }
 
     [ForeignKey("DepartmentID")]

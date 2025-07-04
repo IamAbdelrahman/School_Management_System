@@ -2,8 +2,9 @@
 
 namespace School_Management_System.Repositories.Interfaces
 {
-    public interface IExamRepository:IRepository<Question>
+    public interface IQuestionRepository:IRepository<Question>
     {
             IEnumerable<Question> GetQuestionsByExamId(int examId);
+        
     }
 }

@@ -1,0 +1,33 @@
+﻿@model School_Management_System.Models.Question
+
+@{
+    ViewData["Title"] = "Question Details";
+}
+
+<h2 class="mb-4">❓ Question Details</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Question Information</h5>
+        <dl class="row">
+            <dt class="col-sm-3">Body</dt>
+            <dd class="col-sm-9">@Model.Body</dd>
+
+            <dt class="col-sm-3">Header</dt>
+            <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.Header) ? Model.Header : "—")</dd>
+
+            <dt class="col-sm-3">Mark</dt>
+            <dd class="col-sm-9">@Model.Mark</dd>
+
+            <dt class="col-sm-3">Correct Answer</dt>
+            <dd class="col-sm-9">@Model.CorrectAnswer</dd>
+
+            <dt class="col-sm-3">Type</dt>
+            <dd class="col-sm-9">@Model.Type.ToString()</dd>
+
+            
+        </dl>
+    </div>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">⬅️ Back to List</a>
