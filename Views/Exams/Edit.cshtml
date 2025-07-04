@@ -1,0 +1,42 @@
+﻿@model ExamViewModel
+
+@{
+    ViewData["Title"] = "Edit Exam";
+}
+
+<h2 class="mb-4">✏️ Edit Exam</h2>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="ExamID" />
+
+            <div class="mb-3">
+                <label asp-for="Type" class="form-label"></label>
+                <input asp-for="Type" class="form-control" />
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Grade" class="form-label"></label>
+                <input asp-for="Grade" type="number" class="form-control" />
+                <span asp-validation-for="Grade" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CourseID" class="form-label">Course</label>
+                <select asp-for="CourseID" asp-items="Model.Courses" class="form-select">
+                    <option value="">Select a Course</option>
+                </select>
+                <span asp-validation-for="CourseID" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
