@@ -32,10 +32,11 @@ public partial class ITIContext : DbContext
     public virtual DbSet<StudentExam> StudentExams { get; set; }
 
     public virtual DbSet<Teacher> Teachers { get; set; }
+    public virtual DbSet<Question> Questions { get; set; }
 
-//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=ITI_MVC;Integrated Security=True;Encrypt=True");
+    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+    //        => optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=ITI_MVC;Integrated Security=True;Encrypt=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -101,6 +102,27 @@ public partial class ITIContext : DbContext
             entity.HasOne(d => d.Department).WithMany(p => p.Teachers).HasConstraintName("FK_Teacher_Department");
 
             entity.HasOne(d => d.Exam).WithMany(p => p.Teachers).HasConstraintName("FK_Teacher_Exam");
+        });
+
+        modelBuilder.Entity<Question>(entity =>
+        {
+            entity.ToTable("Question");
+            entity.HasKey(e => e.QuestionID);
+            entity.Property(e => e.QuestionID).ValueGeneratedOnAdd();
+
+            entity.Property(e => e.Body)
+                  .IsRequired();
+
+            entity.Property(e => e.Mark)
+                  .HasDefaultValue(1);
+
+            entity.Property(e => e.Type)
+                  .HasConversion<int>();
+
+            entity.HasOne(e => e.Exam)
+                  .WithMany(e => e.Questions)
+                  .HasForeignKey(e => e.ExamID)
+                  .HasConstraintName("FK_Question_Exam");
         });
 
         OnModelCreatingPartial(modelBuilder);

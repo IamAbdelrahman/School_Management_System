@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using School_Management_System.Models;
+using School_Management_System.Repositories;
 using School_Management_System.Repositories.Implementations;
 using School_Management_System.Repositories.Interfaces;
 
@@ -21,6 +22,7 @@ namespace School_Management_System
             builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 
 
+            builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 
             // Register the DbContext with dependency injection
             builder.Services.AddScoped<ICourseRepository, CourseRepository>();
