@@ -6,6 +6,7 @@ namespace School_Management_System.Controllers
 {
     public class HomeController : Controller
     {
+
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -17,6 +18,7 @@ namespace School_Management_System.Controllers
         {
             return View();
         }
+
 
         public IActionResult Privacy()
         {
