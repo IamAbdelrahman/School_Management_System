@@ -1,0 +1,59 @@
+﻿@model QuestionViewModel
+
+<h2>Edit Question</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="QuestionID" />
+
+    <div class="mb-3">
+        <label asp-for="Header" class="form-label"></label>
+        <input asp-for="Header" class="form-control" />
+        <span asp-validation-for="Header" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Body" class="form-label"></label>
+        <input asp-for="Body" class="form-control" />
+        <span asp-validation-for="Body" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Mark" class="form-label"></label>
+        <input asp-for="Mark" class="form-control" />
+        <span asp-validation-for="Mark" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CorrectAnswer" class="form-label"></label>
+        <input asp-for="CorrectAnswer" class="form-control" />
+        <span asp-validation-for="CorrectAnswer" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Type" class="form-label"></label>
+        <select asp-for="Type" class="form-select">
+            @foreach (var type in Enum.GetValues(typeof(School_Management_System.Models.QuestionType)))
+            {
+                <option value="@type" selected="@(Model.Type == (School_Management_System.Models.QuestionType)type)">
+                    @type
+                </option>
+            }
+        </select>
+        <span asp-validation-for="Type" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ExamID" class="form-label">Exam</label>
+        <select asp-for="ExamID" asp-items="Model.Exams" class="form-select">
+            <option value="">Select Exam</option>
+        </select>
+        <span asp-validation-for="ExamID" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
