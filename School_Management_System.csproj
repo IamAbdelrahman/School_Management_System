@@ -9,7 +9,6 @@
   <ItemGroup>
 
     <Folder Include="Views\Classes\" />
-    <Folder Include="Views\Exams\" />
     <Folder Include="Views\Enrollments\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>

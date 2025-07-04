@@ -27,6 +27,11 @@ namespace School_Management_System
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             builder.Services.AddScoped<IStudentRepository, StudentRepository>();
             builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
+
+            builder.Services.AddScoped<IExamRepository, ExamRepository>();
+
+            // Register the DbContext with dependency injection
+
             builder.Services.AddScoped<ICourseRepository, CourseRepository>();
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<ITIContext>()
