@@ -78,7 +78,6 @@ namespace School_Management_System.Repositories.Implementations
             return matchedCourses;
         }
 
-
         IEnumerable<Course> ICourseRepository.GetCoursesByTeacherId(int teacherId)
         {
             var courses = db.Courses
@@ -111,5 +110,26 @@ namespace School_Management_System.Repositories.Implementations
             var sql = $"DBCC CHECKIDENT ('{tableName}', RESEED, {seedValue})";
             db.Database.ExecuteSqlRaw(sql);
         }
+
+        public IEnumerable<Course> GetCourseWithDepartments()
+        {
+            return db.Courses
+                .Include(c => c.Department)
+                .ToList();
+        }
+        public IEnumerable<Course> GetCourseWithTeachers()
+        {
+            return db.Courses
+            .Include(c => c.Teacher)
+            .ToList();
+        }
+        public IEnumerable<Course> GetCoursesByTeachersAndDepartments()
+        {
+            return db.Courses
+                .Include(c => c.Teacher)
+                .Include(c => c.Department)
+                .ToList();
+        }
+
     }
 }

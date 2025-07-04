@@ -11,13 +11,16 @@ namespace School_Management_System.Controllers
         ICourseRepository courseRepo;
         ITeacherRepository teacherRepo;
         IDepartmentRepository departmentRepo;
-        public CoursesController(ICourseRepository courseRepository)
+        public CoursesController(ICourseRepository courseRepository, ITeacherRepository techerRepo, 
+            IDepartmentRepository departmentRepo)
         {
             this.courseRepo = courseRepository;
+            this.teacherRepo = techerRepo;
+            this.departmentRepo = departmentRepo;
         }
         public IActionResult Index()
         {
-            var courses = courseRepo.GetAll();
+            var courses = courseRepo.GetCoursesByTeachersAndDepartments();
             var courseVM = courses.Select (c => new CourseViewModel
             {
                 CourseID = c.CourseID,
@@ -59,8 +62,8 @@ namespace School_Management_System.Controllers
         }
         public IActionResult Create()
         {
-            ViewBag.Teachers = teacherRepo.GetAll().Select(t => new { t.TeacherID, t.Name }).ToList();
-            ViewBag.Departments = departmentRepo.GetAll().Select(d => new { d.DepartmentID, d.Name }).ToList();
+            ViewBag.Teachers = teacherRepo.GetAll();
+            ViewBag.Departments = departmentRepo.GetAll();
             return View();
         }
         public IActionResult Edit(int id)
