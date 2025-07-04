@@ -1,8 +1,56 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿
+@{  
+    ViewData["Title"] = "Home";  
+}  
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="floating-circles">  
+    @for (int i = 0; i < 20; i++)  
+    {  
+        <span style="  
+                left:@(i * 5)%  
+                animation-delay:@(i * 1.2)s  
+                animation-duration:@(15 + i % 5)s;">  
+        </span>  
+    }  
+</div>  
+
+<div class="hero">  
+    <h1>Welcome to Elite School</h1>  
+    <p>Empowering future leaders through excellence in education.</p>  
+    <a class="btn btn-primary btn-lg mt-4" href="/Courses">Explore Courses</a>  
+</div>  
+
+<div class="container mt-5">  
+    <div class="jumbotron text-center bg-light p-5 rounded shadow">  
+        <h1 class="display-4">Welcome to <strong>Elite International School</strong></h1>  
+        <p class="lead">Empowering students for a brighter future through knowledge and character.</p>  
+        <hr class="my-4" />  
+        <img src="~/images/school-cover.jpg" class="img-fluid rounded shadow-sm mb-4" style="max-height: 400px;" />  
+        <a class="btn btn-primary btn-lg" href="/Courses" role="button">Explore Courses</a>  
+    </div>  
+
+    <div class="row text-center mt-5">  
+        <div class="col-md-4">  
+            <div class="card p-3 shadow-sm">  
+                <h4>📚  Courses</h4>  
+                <p>Explore a wide range of academic subjects taught by expert teachers.</p>  
+            </div>  
+        </div>  
+        <div class="col-md-4">  
+            <div class="card p-3 shadow-sm">  
+                <h4>👨‍🏫  Teachers</h4>  
+                <p>Meet our experienced and dedicated educators.</p>  
+            </div>  
+        </div>  
+        <div class="col-md-4">  
+            <div class="card p-3 shadow-sm">  
+                <h4>🎓  Students</h4>  
+                <p>Track student performance and enrollment statistics.</p>  
+            </div>  
+        </div>  
+    </div>  
+
+    <div class="mt-5 text-center">  
+        <h5 class="text-muted">Contact us at: <strong>info@eliteschool.com</strong></h5>  
+    </div>  
 </div>

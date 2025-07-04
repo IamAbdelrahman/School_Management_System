@@ -1,0 +1,56 @@
+﻿@using School_Management_System.ViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+@model TeacherViewModel
+
+<h2 class="mb-4"> Teacher Details</h2>
+<table class="table table-striped table-bordered shadow">
+    <thead class="table-dark text-center">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Hire Date</th>
+            <th>Role</th>
+            <th>Department</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+            <td>@Model.Id</td>
+            <td>@Model.Name</td>
+            <td>@Model.Email</td>
+            <td>@Model.Phone</td>
+            <td>@Model.HireDate</td>
+            <td>@Model.Role</td>
+            <td>@Model.DepartmentName</td>
+            </tr>
+            </tbody>
+        </table>
+
+<a asp-action="Index" class="btn btn-secondary">Back</a>
+
+@* <!-- Views/Teachers/Create.cshtml -->
+@model TeacherViewModel
+<h2>Add Teacher</h2>
+<form asp-action="Create">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    @Html.EditorForModel()
+    <button type="submit" class="btn btn-success">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+<!-- Views/Teachers/Edit.cshtml -->
+@model TeacherViewModel
+<h2>Edit Teacher</h2>
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    @Html.EditorForModel()
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form> *@

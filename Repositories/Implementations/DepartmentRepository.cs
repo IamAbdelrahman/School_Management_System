@@ -1,5 +1,7 @@
-﻿using School_Management_System.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using School_Management_System.Models;
 using School_Management_System.Repositories.Interfaces;
+using System;
 
 namespace School_Management_System.Repositories.Implementations
 {
@@ -18,27 +20,34 @@ namespace School_Management_System.Repositories.Implementations
 
         public IEnumerable<Department> GetAll()
         {
-            return db.Departments.ToList();
+            return db.Departments.Include(d => d.Teachers).ToList();
         }
 
         public Department GetById(int id)
         {
-            throw new NotImplementedException();
+            return db.Departments.Include(d => d.Teachers)
+                .Include(d => d.Courses).SingleOrDefault(d => d.DepartmentID == id) 
+                ?? throw new KeyNotFoundException($"Department with ID {id} not found.");
         }
 
         public void Add(Department entity)
         {
-            throw new NotImplementedException();
+            db.Add(entity);
         }
 
         public void Update(Department entity)
         {
-            throw new NotImplementedException();
+            db.Departments.Update(entity);
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var dept = db.Departments.Find(id);
+            if (dept == null)
+            {
+                throw new KeyNotFoundException($"Department with ID {id} not found.");
+            }
+            if (dept != null) db.Departments.Remove(dept);
         }
 
         public void SaveChanges()
@@ -52,3 +61,10 @@ namespace School_Management_System.Repositories.Implementations
         }
     }
 }
+
+
+
+
+
+
+
