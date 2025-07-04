@@ -17,9 +17,14 @@ namespace School_Management_System
             builder.Services.AddDbContext<ITIContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("iticonfig")));
 
- 
+
+            //For register
             builder.Services.AddScoped<IClassRepository, ClassRepository>();
             builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+
+
 
 
             builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
