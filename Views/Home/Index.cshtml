@@ -1,8 +1,153 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- 🔁 Slider -->
+<div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active" style="height: 70vh; background: url('https://images.unsplash.com/photo-1588072432836-e10032774350') center center / cover no-repeat;">
+            <div class="d-flex h-100 align-items-center justify-content-center text-white text-center" style="background: rgba(0,0,0,0.4);">
+                <div>
+                    <h1 class="display-4">Explore Our Students</h1>
+                    <a href="/Students" class="btn btn-warning btn-lg mt-3">View Students</a>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item" style="height: 70vh; background: url('https://images.unsplash.com/photo-1603145733142-1c7053ab4f3b') center center / cover no-repeat;">
+            <div class="d-flex h-100 align-items-center justify-content-center text-white text-center" style="background: rgba(0,0,0,0.4);">
+                <div>
+                    <h1 class="display-4">Meet Our Teachers</h1>
+                    <a href="/Teachers" class="btn btn-warning btn-lg mt-3">View Teachers</a>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item" style="height: 70vh; background: url('https://images.unsplash.com/photo-1596495577886-d920f1fb7238') center center / cover no-repeat;">
+            <div class="d-flex h-100 align-items-center justify-content-center text-white text-center" style="background: rgba(0,0,0,0.4);">
+                <div>
+                    <h1 class="display-4">Our Courses</h1>
+                    <a href="/Courses" class="btn btn-warning btn-lg mt-3">View Courses</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
 </div>
+
+<!-- 💡 Our Services -->
+<section class="py-5 bg-light text-center">
+    <div class="container">
+        <h2 class="fw-bold mb-4">Our Services</h2>
+        <p class="text-muted mb-5">We provide complete school management solutions for students, teachers, and administrators.</p>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Student Management</h5>
+                        <p class="card-text">Track performance, attendance, and growth.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Teacher Dashboard</h5>
+                        <p class="card-text">Manage classes and monitor student progress.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Course Builder</h5>
+                        <p class="card-text">Create and assign engaging course content.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Reports & Analysis</h5>
+                        <p class="card-text">Generate insights for better decisions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 🧩 Features -->
+<section class="py-5 text-center">
+    <div class="container">
+        <h2 class="fw-bold mb-4">Why Choose Us?</h2>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="p-4 bg-light rounded shadow-sm h-100">
+                    <h5>Interactive Classes</h5>
+                    <p class="text-muted">Engaging teaching methods.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-4 bg-light rounded shadow-sm h-100">
+                    <h5>Qualified Teachers</h5>
+                    <p class="text-muted">Experienced and certified.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-4 bg-light rounded shadow-sm h-100">
+                    <h5>Modern Facilities</h5>
+                    <p class="text-muted">Labs, libraries, and more.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-4 bg-light rounded shadow-sm h-100">
+                    <h5>Smart Learning</h5>
+                    <p class="text-muted">Technology in education.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 💰 Plan Upgrades -->
+<section class="py-5 bg-light text-center">
+    <div class="container">
+        <h2 class="fw-bold mb-5">Plan Upgrades</h2>
+        <div class="row g-4">
+            @for (int i = 0; i < 6; i++)
+            {
+                var mod = i % 3;
+                var plan = mod == 0
+                ? ("£2900", "DAILY", "Art Courses")
+                : mod == 1
+                ? ("£4900", "WEEKLY", "Sports")
+                : ("£5900", "MONTHLY", "Science Labs");
+
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <h3 class="fw-bold text-primary">@plan.Item1</h3>
+                            <h6 class="text-uppercase text-muted">@plan.Item2</h6>
+                            <p class="fw-semibold">@plan.Item3</p>
+                            <p class="text-muted">Lorem ipsum dolor sit amet, ei velit oblique fuisset vel, vim in ferri eleifend.</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- ℹ️ About Us -->
+<section class="py-5 text-center">
+    <div class="container">
+        <h2 class="fw-bold mb-3">About Us</h2>
+        <p class="text-muted mx-auto" style="max-width: 700px;">
+            Future Gate School is committed to providing a holistic learning experience for every student. With our modern facilities and qualified staff, we aim to empower the next generation.
+        </p>
+    </div>
+</section>
