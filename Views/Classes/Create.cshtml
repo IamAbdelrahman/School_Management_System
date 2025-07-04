@@ -1,0 +1,40 @@
+﻿@model School_Management_System.ViewModel.ClassViewModel
+
+@{
+    ViewData["Title"] = "Create New Class";
+}
+
+<h2 class="mb-4">➕ Create New Class</h2>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="GradeLevel" class="form-label"></label>
+                <input asp-for="GradeLevel" class="form-control" type="number" />
+                <span asp-validation-for="GradeLevel" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="TeacherID" class="form-label">Assigned Teacher</label>
+                <select asp-for="TeacherID" class="form-select" asp-items="Model.Teachers">
+                    <option value="">-- Select a Teacher --</option>
+                </select>
+                <span asp-validation-for="TeacherID" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-success">Create</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

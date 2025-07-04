@@ -1,0 +1,29 @@
+﻿@using School_Management_System.ViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+@model CourseViewModel
+
+<h2 class="mb-4">📚 Course Details</h2>
+
+<table class="table table-striped table-bordered shadow">
+    <thead class="table-dark text-center">
+        <tr>
+            <th>ID</th>
+            <th>Course Name</th>
+            <th>Description</th>
+            <th>Teacher</th>
+            <th>Department</th>
+        </tr>
+    </thead>
+    <tbody>
+    <td>@Model.CourseID</td>
+    <td>@Model.Name</td>
+    <td>@Model.Description</td>
+    <td>@Model.TeacherName</td>
+    <td>@Model.DepartmentName</td>
+
+    </tbody>
+</table>

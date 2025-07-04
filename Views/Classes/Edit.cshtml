@@ -1,0 +1,42 @@
+﻿@model School_Management_System.ViewModel.ClassViewModel
+
+@{
+    ViewData["Title"] = "Edit Class";
+}
+
+<h2 class="mb-4">✏️ Edit Class</h2>
+
+<div class="card shadow p-4">
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="ClassID" />
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label fw-bold"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="GradeLevel" class="form-label fw-bold"></label>
+            <input asp-for="GradeLevel" class="form-control" />
+            <span asp-validation-for="GradeLevel" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="TeacherID" class="form-label fw-bold">Assigned Teacher</label>
+            <select asp-for="TeacherID" asp-items="Model.Teachers" class="form-select">
+                <option value="">-- Select Teacher --</option>
+            </select>
+            <span asp-validation-for="TeacherID" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex justify-content-end mt-4">
+            <button type="submit" class="btn btn-primary me-2">💾 Save Changes</button>
+            <a asp-action="Index" class="btn btn-secondary">↩️ Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
