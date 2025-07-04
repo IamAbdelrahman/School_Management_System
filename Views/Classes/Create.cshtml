@@ -1,43 +1,4 @@
-﻿@* @model School_Management_System.ViewModel.ClassViewModel
-
-@{
-    ViewData["Title"] = "Create New Class";
-}
-
-<h2>Create New Class</h2>
-
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="GradeLevel" class="control-label"></label>
-        <input asp-for="GradeLevel" class="form-control" type="number" />
-        <span asp-validation-for="GradeLevel" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="TeacherID" class="control-label"></label>
-        <select asp-for="TeacherID" class="form-control" asp-items="Model.Teachers">
-            <option value="">-- Select a Teacher --</option>
-        </select>
-        <span asp-validation-for="TeacherID" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-success mt-3">Create</button>
-    <a asp-action="Index" class="btn btn-secondary mt-3">Cancel</a>
-</form>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-} *@
-
-@model School_Management_System.ViewModel.ClassViewModel
+﻿@model School_Management_System.ViewModel.ClassViewModel
 
 @{
     ViewData["Title"] = "Create New Class";
