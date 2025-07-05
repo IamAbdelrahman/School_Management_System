@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using School_Management_System.Data;
@@ -10,6 +11,7 @@ using System;
 
 namespace School_Management_System.Controllers
 {
+    [Authorize(Roles = "Admin,Teacher")]
     public class CoursesController : Controller
     {
         private readonly ICourseRepository _repo;

@@ -14,8 +14,6 @@ public partial class Department
     [Key]
     public int DepartmentID { get; set; }
 
-    [Required(ErrorMessage = "Department name is required")]
-    [StringLength(30)]
     public string Name { get; set; }
 
     [InverseProperty("Department")]

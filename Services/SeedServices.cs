@@ -23,7 +23,8 @@ namespace School_Management_System.Services
                 // Add roles
                 logger.LogInformation("Seeding roles.");
                 await AddRoleAsync(roleManager, "Admin");
-                await AddRoleAsync(roleManager, "User");
+                await AddRoleAsync(roleManager, "Teacher");
+                await AddRoleAsync(roleManager, "Parent");
 
                 // Add admin user
                 logger.LogInformation("Seeding admin user.");

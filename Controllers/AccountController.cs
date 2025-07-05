@@ -37,14 +37,29 @@ namespace School_Management_System.Controllers
 
             if (result.Succeeded)
             {
-                return RedirectToAction("Index", "Home");
+                var user = await userManager.FindByEmailAsync(model.Email);
+
+                if (user != null)
+                {
+                    if (await userManager.IsInRoleAsync(user, "Admin"))
+                        return RedirectToAction("Admin", "Home");
+
+                    if (await userManager.IsInRoleAsync(user, "Teacher"))
+                        return RedirectToAction("Teacher", "Home");
+
+                    if (await userManager.IsInRoleAsync(user, "Parent"))
+                        return RedirectToAction("Parent", "Home");
+
+                    // Default User role
+                    return RedirectToAction("Index", "Home");
+                }
             }
 
             ModelState.AddModelError(string.Empty, "Invalid Login Attempt.");
             return View(model);
         }
 
-        [HttpGet]
+
         public IActionResult Register()
         {
             return View();
@@ -65,24 +80,30 @@ namespace School_Management_System.Controllers
                 UserName = model.Email,
                 NormalizedUserName = model.Email.ToUpper(),
                 Email = model.Email,
-                NormalizedEmail = model.Email.ToUpper()
+                NormalizedEmail = model.Email.ToUpper(),
+                EmailConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString()
             };
 
             var result = await userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
             {
-                var roleExist = await roleManager.RoleExistsAsync("User");
+                var selectedRole = string.IsNullOrWhiteSpace(model.Role) ? "User" : model.Role;
 
-                if (!roleExist)
+                // Ensure the role exists
+                if (!await roleManager.RoleExistsAsync(selectedRole))
                 {
-                    var role = new IdentityRole("User");
-                    await roleManager.CreateAsync(role);
+                    await roleManager.CreateAsync(new IdentityRole(selectedRole));
                 }
 
-                await userManager.AddToRoleAsync(user, "User");
+                // Assign role
+                await userManager.AddToRoleAsync(user, selectedRole);
 
+                // Sign in the user
                 await signInManager.SignInAsync(user, isPersistent: false);
+
+                // Redirect to login or role-specific dashboard
                 return RedirectToAction("Login", "Account");
             }
 
@@ -93,6 +114,7 @@ namespace School_Management_System.Controllers
 
             return View(model);
         }
+
 
         [HttpGet]
         public IActionResult VerifyEmail()
@@ -176,3 +198,5 @@ namespace School_Management_System.Controllers
         }
     }
 }
+
+

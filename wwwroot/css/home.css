@@ -4,6 +4,11 @@
     font-family: 'Segoe UI', sans-serif;
 }
 
+.carousel-item {
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+}
 .image-zoom {
     transition: transform 0.5s ease;
 }
