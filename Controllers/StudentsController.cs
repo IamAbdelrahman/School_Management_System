@@ -65,6 +65,9 @@ namespace School_Management_System.Controllers
                         Name = stFromReq.Name,
                         Age = stFromReq.Age,
                         ClassID = stFromReq.ClassID,
+                        Gender = stFromReq.Gender,
+                        Address = stFromReq.Address,
+                        Phone = stFromReq.Phone,
 
                     };
                     stRepo.Add(student);
