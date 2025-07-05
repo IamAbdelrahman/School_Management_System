@@ -1,17 +1,16 @@
-﻿// Index
-@model List<School_Management_System.Models.Question>
+﻿@model List<Exam>
 
 @{
-    ViewData["Title"] = "Questions";
+    ViewData["Title"] = "Exams";
     int pageNumber = ViewBag.PageNumber ?? 1;
     int totalPages = ViewBag.TotalPages ?? 1;
     string searchTerm = ViewBag.SearchTerm as string ?? "";
 }
 
-<h2 class="mb-4">❓ Questions</h2>
+<h2 class="mb-4">📚 Exams</h2>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <a asp-action="Create" class="btn btn-success">➕ Add New Question</a>
+    <a asp-action="Create" class="btn btn-success">➕ Add New Exam</a>
 
     <form method="get" asp-action="Index" class="d-flex" role="search">
         <input type="text" name="searchTerm" class="form-control me-2" placeholder="🔍 Search..." value="@searchTerm" />
@@ -23,12 +22,9 @@
     <thead class="table-dark text-center">
         <tr>
             <th>#</th>
-            <th>Body</th>
-            <th>Header</th>
-            <th>Mark</th>
-            <th>Correct Answer</th>
             <th>Type</th>
-            <th>Exam ID</th>
+            <th>Grade</th>
+            <th>Course ID</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -36,24 +32,21 @@
         @if (Model != null && Model.Any())
         {
             int i = 1 + (pageNumber - 1) * 5;
-            foreach (var q in Model)
+            foreach (var exam in Model)
             {
                 <tr class="align-middle text-center">
                     <td>@i</td>
-                    <td>@q.Body</td>
-                    <td>@(string.IsNullOrEmpty(q.Header) ? "—" : q.Header)</td>
-                    <td>@q.Mark</td>
-                    <td>@q.CorrectAnswer</td>
-                    <td>@q.Type</td>
-                    <td>@q.ExamID</td>
+                    <td>@exam.Type</td>
+                    <td>@(exam.Grade.HasValue? exam.Grade: "—")</td>
+                    <td>@(exam.CourseID.HasValue? exam.CourseID: "—")</td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@q.QuestionID" class="btn btn-info btn-sm mx-1">
+                        <a asp-action="Details" asp-route-id="@exam.ExamID" class="btn btn-info btn-sm mx-1">
                             <i class="bi bi-eye"></i> View
                         </a>
-                        <a asp-action="Edit" asp-route-id="@q.QuestionID" class="btn btn-warning btn-sm mx-1">
+                        <a asp-action="Edit" asp-route-id="@exam.ExamID" class="btn btn-warning btn-sm mx-1">
                             <i class="bi bi-pencil-square"></i> Edit
                         </a>
-                        <a asp-action="Delete" asp-route-id="@q.QuestionID" class="btn btn-danger btn-sm mx-1">
+                        <a asp-action="Delete" asp-route-id="@exam.ExamID" class="btn btn-danger btn-sm mx-1">
                             <i class="bi bi-trash"></i> Delete
                         </a>
                     </td>
@@ -64,7 +57,7 @@
         else
         {
             <tr>
-                <td colspan="8" class="text-center text-muted">No questions found.</td>
+                <td colspan="5" class="text-center text-muted">No exams found.</td>
             </tr>
         }
     </tbody>

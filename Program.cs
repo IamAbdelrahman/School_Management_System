@@ -5,6 +5,7 @@ using School_Management_System.Models;
 using School_Management_System.Repositories;
 using School_Management_System.Repositories.Implementations;
 using School_Management_System.Repositories.Interfaces;
+using School_Management_System.Services;
 using System;
 
 namespace School_Management_System
@@ -20,6 +21,18 @@ namespace School_Management_System
             builder.Services.AddDbContext<ITIContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("iticonfig")));
 
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequiredLength = 8;
+                options.User.RequireUniqueEmail = true;
+                options.SignIn.RequireConfirmedAccount = true;
+                options.SignIn.RequireConfirmedEmail = true;
+                options.SignIn.RequireConfirmedPhoneNumber = false;
+            })
+            .AddEntityFrameworkStores<ITIContext>()
+            .AddDefaultTokenProviders();
 
             //For register
             builder.Services.AddScoped<IClassRepository, ClassRepository>();
@@ -28,12 +41,10 @@ namespace School_Management_System
             builder.Services.AddScoped<IStudentRepository, StudentRepository>();
             builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
             builder.Services.AddScoped<ICourseRepository, CourseRepository>();
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<ITIContext>()
-            .AddDefaultTokenProviders();
+            builder.Services.AddScoped<IExamRepository, ExamRepository>();
 
             var app = builder.Build();
-
+            await SeedService.SeedDatabase(app.Services);
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -47,18 +58,20 @@ namespace School_Management_System
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-            using (var scope = app.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                await DbInitializer.SeedAsync(services);
-            }
+
 
             app.Run();
         }
     }
 }
+
+
+
+
+
