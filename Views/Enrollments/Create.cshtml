@@ -15,14 +15,14 @@
             <div class="mb-3">
                 <label asp-for="StudentID"></label>
                 <select class="form form-control" asp-for="StudentID" asp-items="studentOptions">
-                    <option value="0">--Select Student--</option>
+                    <option value="">--Select Student--</option>
                 </select>
                 <span asp-validation-for="StudentID" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="CourseID"></label>
                 <select class="form form-control" asp-for="CourseID" asp-items="courseOptions">
-                    <option value="0">--Select Course--</option>
+                    <option value="">--Select Course--</option>
                 </select>
                 <span asp-validation-for="CourseID" class="text-danger"></span>
             </div>
