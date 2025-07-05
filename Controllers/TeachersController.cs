@@ -81,6 +81,7 @@ namespace School_Management_System.Controllers
             return View(viewModel);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(TeacherViewModel viewModel)
@@ -91,9 +92,12 @@ namespace School_Management_System.Controllers
                     .Select(d => new SelectListItem { Value = d.DepartmentID.ToString(), Text = d.Name }).ToList();
                 return View(viewModel);
             }
-
+            var maxId = _teacherRepo.GetAll().Any()
+                     ? _teacherRepo.GetAll().Max(t => t.TeacherID)
+                     : 0;
             var teacher = new Teacher
             {
+                TeacherID = maxId +1,
                 Name = viewModel.Name,
                 Phone = viewModel.Phone,
                 Email = viewModel.Email,

@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Parent Dashboard";
+}
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="text-success">Welcome to Your Student Dashboard</h1>
+        <p class="lead">Access your enrolled courses and results</p>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card border-start border-success border-5 shadow">
+                <div class="card-body">
+                    <h5 class="card-title">My Courses</h5>
+                    <p class="card-text">Browse your active course enrollments.</p>
+                    <a asp-controller="Courses" asp-action="MyEnrollments" class="btn btn-success w-100">View Courses</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-start border-secondary border-5 shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Exam Results</h5>
+                    <p class="card-text">Check your grades and performance.</p>
+                    <a asp-controller="Exams" asp-action="MyResults" class="btn btn-secondary w-100">View Results</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -4,6 +4,21 @@
     font-family: 'Segoe UI', sans-serif;
 }
 
+.carousel-item {
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+}
+.image-zoom {
+    transition: transform 0.5s ease;
+}
+
+.image-zoom:hover {
+    transform: scale(1.1);
+}
+
+
+
 .hero {
     padding: 100px 20px;
     text-align: center;
