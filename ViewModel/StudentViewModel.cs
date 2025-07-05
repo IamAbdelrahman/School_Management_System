@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using School_Management_System.Models;
 using School_Management_System.ViewModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,8 +19,10 @@ namespace School_Management_System.ViewModel
         [RegularExpression(@"^[0-9]+$", ErrorMessage = "Age must be a number")]
         public int? Age { get; set; }
 
+        [Required(ErrorMessage = "Please Enter Gender")]
         public string? Gender { get; set; }
 
+        [Required(ErrorMessage = "Please Enter Address")]
         [StringLength(30, ErrorMessage = "Addrees Can't exceed 30 characters")]
         public string? Address { get; set; }
 
@@ -27,13 +30,11 @@ namespace School_Management_System.ViewModel
         [RegularExpression(@"^\+?[0-9]{11}$", ErrorMessage = "Phone must be exactly 11 digits with optional '+'")]
         public string? Phone { get; set; }
 
-        //Foreign Key
-        [Display(Name ="Class Name")]
+        /*ForeignKeys*/
+        [ForeignKey("Class")]
+        [Display(Name = "Class")]
         public int? ClassID { get; set; }
-
-        public List<SelectListItem>? Classes { get; set; }
-
-        public string? ClassName { get; set; }
+        public Class? Class { get; set; }
 
 
     }
