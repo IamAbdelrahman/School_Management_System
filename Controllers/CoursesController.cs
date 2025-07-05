@@ -1,111 +1,122 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using School_Management_System.Data;
 using School_Management_System.Models;
 using School_Management_System.Repositories.Implementations;
 using School_Management_System.Repositories.Interfaces;
 using School_Management_System.ViewModel;
+using System;
 
 namespace School_Management_System.Controllers
 {
     public class CoursesController : Controller
     {
-        ICourseRepository courseRepo;
-        ITeacherRepository teacherRepo;
-        IDepartmentRepository departmentRepo;
-        public CoursesController(ICourseRepository courseRepository, ITeacherRepository techerRepo, 
-            IDepartmentRepository departmentRepo)
+        private readonly ICourseRepository _repo;
+        private readonly ITeacherRepository _teacherRepo;
+        private readonly IDepartmentRepository _DepartmentRepo;
+
+        public CoursesController(ICourseRepository repo, ITeacherRepository teacherRepo, 
+            IDepartmentRepository DepartmentRepo)
         {
-            this.courseRepo = courseRepository;
-            this.teacherRepo = techerRepo;
-            this.departmentRepo = departmentRepo;
+            _repo = repo;
+            _teacherRepo = teacherRepo;
+            _DepartmentRepo = DepartmentRepo;
         }
+
         public IActionResult Index()
         {
-            var courses = courseRepo.GetCoursesByTeachersAndDepartments();
-            var courseVM = courses.Select (c => new CourseViewModel
-            {
-                CourseID = c.CourseID,
-                Name = c.Name,
-                Description = c.Description,
-                TeacherName = c.Teacher?.Name, 
-                DepartmentName = c.Department?.Name 
-            }).ToList();
-            return View(courseVM);
+            var courses =  _repo.GetAll()
+                .Select(c => new CourseViewModel
+                {
+                    CourseID = c.CourseID,
+                    Name = c.Name,
+                    Description = c.Description,
+                    TeacherName = c.Teacher != null ? c.Teacher.Name : "-",
+                    DepartmentName = c.Department != null ? c.Department.Name : "-"
+                });
+
+            return View(courses);
         }
-        public IActionResult Details(int id)
-        {
-            var course = courseRepo.GetById(id);
-            if (course == null)
-            {
-                return NotFound();
-            }
-            var courseVM = new CourseViewModel
-            {
-                CourseID = course.CourseID,
-                Name = course.Name,
-                Description = course.Description,
-                TeacherName = course.Teacher?.Name, 
-                DepartmentName = course.Department?.Name 
-            };
-            return View(courseVM);
-        }
-        public IActionResult Reseed()
-        {
-            try
-            {
-                courseRepo.ReseedTable("Courses", 11);
-                return RedirectToAction("Index");
-            }
-            catch (Exception ex)
-            {
-                return Content("Error: " + ex.Message);
-            }
-        }
+
         public IActionResult Create()
         {
-            ViewBag.Teachers = teacherRepo.GetAll();
-            ViewBag.Departments = departmentRepo.GetAll();
+            ViewBag.Teachers = new SelectList(_teacherRepo.GetAll(), "TeacherID", "Name");
+            ViewBag.Departments = new SelectList(_DepartmentRepo.GetAll(), "DepartmentID", "Name");
             return View();
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Course course)
+        {
+            if (ModelState.IsValid)
+            {
+                _repo.Add(course);
+                _repo.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewBag.Teachers = new SelectList(_teacherRepo.GetAll(), "TeacherID", "Name", course.TeacherID);
+            ViewBag.Departments = new SelectList(_DepartmentRepo.GetAll(), "DepartmentID", "Name", course.DepartmentID);
+            return View(course);
+        }
+
         public IActionResult Edit(int id)
         {
-            var course = courseRepo.GetById(id);
-            if (course == null)
-            {
-                return NotFound();
-            }
-            var courseVM = new CourseViewModel
-            {
-                CourseID = course.CourseID,
-                Name = course.Name,
-                Description = course.Description,
-                TeacherName = course.Teacher?.Name, // Assuming Teacher is a navigation property
-                DepartmentName = course.Department?.Name // Assuming Department is a navigation property
-            };
-            return View(courseVM);
+            var course = _repo.GetById(id);
+            if (course == null) return NotFound();
+
+            ViewBag.Teachers = new SelectList(_teacherRepo.GetAll(), "TeacherID", "Name", course.TeacherID);
+            ViewBag.Departments = new SelectList(_DepartmentRepo.GetAll(), "DepartmentID", "Name", course.DepartmentID);
+            return View(course);
         }
-        //public IActionResult SaveChanges(CourseViewModel courseVM)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var course = new Course
-        //        {
-        //            CourseID = courseVM.CourseID,
-        //            Name = courseVM.Name,
-        //            Description = courseVM.Description,
-        //            TeacherID = courseVM.TeacherName != null ? courseRepo.GetTeacherIdByName(courseVM.TeacherName) : null, // Assuming a method to get TeacherID by name
-        //            DepartmentID = courseVM.DepartmentName != null ? courseRepo.GetDepartmentIdByName(courseVM.DepartmentName) : null // Assuming a method to get DepartmentID by name
-        //        };
-        //        if (course.CourseID > 0)
-        //        {
-        //            courseRepo.Update(course);
-        //        }
-        //        else
-        //        {
-        //            courseRepo.Add(course);
-        //        }
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View("Create", courseVM);
-        //}
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Course course)
+        {
+            if (id != course.CourseID) return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _repo.Update(course);
+                    _repo.SaveChanges();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_repo.GetAll().Any(c => c.CourseID == id))
+                        return NotFound();
+                    throw;
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(course);
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var course = _repo.GetAll()
+                .FirstOrDefault(m => m.CourseID == id);
+            if (course == null) return NotFound();
+
+            return View(course);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var course = _repo.GetById(id);
+            if (course != null)
+            {
+                _repo.Delete(id);
+                _repo.SaveChanges();
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
+
