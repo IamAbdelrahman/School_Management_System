@@ -52,7 +52,7 @@ namespace School_Management_System.Repositories.Implementations
 
         public void SaveChanges()
         {
-            throw new NotImplementedException();
+            db.SaveChanges();
         }
 
         public void ReseedTable(string tableName, int seedValue = 0)
