@@ -93,11 +93,11 @@ namespace School_Management_System.Controllers
                 Class = st.Class,
                 ClassID = st.ClassID,
             };
+
             return View(studentsViewModel);
         }
 
         //////////////////////////////Edit
-        [HttpGet]
         public IActionResult Edit(int id)
         {
             var student = stRepo.GetById(id);
@@ -143,6 +143,8 @@ namespace School_Management_System.Controllers
             ViewData["Classes"] = clsRepo.GetAll();
             return View("Edit", stFromReq);
         }
+
+
 
         ////////////////////////Delete
         [HttpGet]
