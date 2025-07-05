@@ -19,12 +19,13 @@ namespace School_Management_System.Repositories.Implementations
         }
 
         //GetByID
-        public Student GetById(int id)
+        public Student? GetById(int id)
         {
             return context.Students
                 .Include(st => st.Class)
                 .Include(st => st.StudentExams)
                 .Include(st => st.Enrollments)
+                   .ThenInclude(st=> st.Course)
                 .FirstOrDefault(st => st.StudentID == id);
         }
 

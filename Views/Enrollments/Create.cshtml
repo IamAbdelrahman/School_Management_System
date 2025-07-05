@@ -1,0 +1,41 @@
+﻿@model School_Management_System.ViewModel.EnrollmentViewModel
+@{
+    ViewData["Title"] = "Create";
+    SelectList studentOptions = new SelectList(ViewBag.Students, "Value", "Text");
+    SelectList courseOptions = new SelectList(ViewBag.Courses, "CourseID", "Name");
+
+
+}
+
+<h2 class="mb-4">➕ Add New Enrollment</h2>
+
+<form method="post" asp-action="Save" asp-controller="Enrollments">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="mb-3">
+                <label asp-for="StudentID"></label>
+                <select class="form form-control" asp-for="StudentID" asp-items="studentOptions">
+                    <option value="0">--Select Student--</option>
+                </select>
+                <span asp-validation-for="StudentID" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="CourseID"></label>
+                <select class="form form-control" asp-for="CourseID" asp-items="courseOptions">
+                    <option value="0">--Select Course--</option>
+                </select>
+                <span asp-validation-for="CourseID" class="text-danger"></span>
+            </div>
+            
+
+
+            <button type="submit" class="btn btn-success">Create</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </div>
+</form>
+
+<!--client side!-->
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>

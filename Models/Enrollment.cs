@@ -27,4 +27,6 @@ public partial class Enrollment
     [ForeignKey("StudentID")]
     [InverseProperty("Enrollments")]
     public virtual Student Student { get; set; }
+
+   
 }
