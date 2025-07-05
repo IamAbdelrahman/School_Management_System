@@ -2,11 +2,13 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.General;
 
 namespace School_Management_System.Models;
 
-public partial class ITIContext : DbContext
+public partial class ITIContext : IdentityDbContext<ApplicationUser>
 {
     public ITIContext()
     {
@@ -40,19 +42,18 @@ public partial class ITIContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<Class>(entity =>
         {
             entity.Property(e => e.ClassID).ValueGeneratedNever();
-
             entity.HasOne(d => d.Teacher).WithMany(p => p.Classes).HasConstraintName("FK_Class_Teacher");
         });
 
         modelBuilder.Entity<Course>(entity =>
         {
             entity.Property(e => e.CourseID).ValueGeneratedNever();
-
             entity.HasOne(d => d.Department).WithMany(p => p.Courses).HasConstraintName("FK_Course_Department");
-
             entity.HasOne(d => d.Teacher).WithMany(p => p.Courses).HasConstraintName("FK_Course_Teacher");
         });
 
@@ -64,46 +65,36 @@ public partial class ITIContext : DbContext
         modelBuilder.Entity<Enrollment>(entity =>
         {
             entity.Property(e => e.EnrollmentID).ValueGeneratedNever();
-
             entity.HasOne(d => d.Course).WithMany(p => p.Enrollments).HasConstraintName("FK_Enrollment_Course");
-
             entity.HasOne(d => d.Student).WithMany(p => p.Enrollments).HasConstraintName("FK_Enrollment_Student");
         });
 
         modelBuilder.Entity<Exam>(entity =>
         {
             entity.Property(e => e.ExamID).ValueGeneratedNever();
-
             entity.HasOne(d => d.Course).WithMany(p => p.Exams).HasConstraintName("FK_Exam_Course");
         });
 
         modelBuilder.Entity<Student>(entity =>
         {
             entity.HasKey(e => e.StudentID).HasName("PK_Student_1");
-
             entity.Property(e => e.StudentID).ValueGeneratedNever();
-
             entity.HasOne(d => d.Class).WithMany(p => p.Students).HasConstraintName("FK_Student_Class");
         });
 
         modelBuilder.Entity<StudentExam>(entity =>
         {
             entity.Property(e => e.StudentExamID).ValueGeneratedNever();
-
             entity.HasOne(d => d.Exam).WithMany(p => p.StudentExams).HasConstraintName("FK_StudentExam_Exam");
-
             entity.HasOne(d => d.Student).WithMany(p => p.StudentExams).HasConstraintName("FK_StudentExam_Student");
         });
 
         modelBuilder.Entity<Teacher>(entity =>
         {
             entity.Property(e => e.TeacherID).ValueGeneratedNever();
-
             entity.HasOne(d => d.Department).WithMany(p => p.Teachers).HasConstraintName("FK_Teacher_Department");
-
             entity.HasOne(d => d.Exam).WithMany(p => p.Teachers).HasConstraintName("FK_Teacher_Exam");
         });
-
         modelBuilder.Entity<Question>(entity =>
         {
             entity.ToTable("Question");
@@ -123,6 +114,36 @@ public partial class ITIContext : DbContext
                   .WithMany(e => e.Questions)
                   .HasForeignKey(e => e.ExamID)
                   .HasConstraintName("FK_Question_Exam");
+        });
+
+        // Fix for IdentityUserLogin<string> missing key
+        modelBuilder.Entity<Microsoft.AspNetCore.Identity.IdentityUserLogin<string>>(entity =>
+        {
+            entity.HasKey(l => new { l.LoginProvider, l.ProviderKey });
+        });
+
+        // Fix for IdentityUserRole<string> missing key
+        modelBuilder.Entity<Microsoft.AspNetCore.Identity.IdentityUserRole<string>>(entity =>
+        {
+            entity.HasKey(r => new { r.UserId, r.RoleId });
+        });
+
+        // Fix for IdentityUserToken<string> missing key
+        modelBuilder.Entity<Microsoft.AspNetCore.Identity.IdentityUserToken<string>>(entity =>
+        {
+            entity.HasKey(t => new { t.UserId, t.LoginProvider, t.Name });
+        });
+
+        // Fix for IdentityUserClaim<string> missing key
+        modelBuilder.Entity<Microsoft.AspNetCore.Identity.IdentityUserClaim<string>>(entity =>
+        {
+            entity.HasKey(c => c.Id);
+        });
+
+        // Fix for IdentityRoleClaim<string> missing key
+        modelBuilder.Entity<Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>>(entity =>
+        {
+            entity.HasKey(rc => rc.Id);
         });
 
         OnModelCreatingPartial(modelBuilder);
