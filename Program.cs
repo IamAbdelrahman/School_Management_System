@@ -42,6 +42,7 @@ namespace School_Management_System
             builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
             builder.Services.AddScoped<ICourseRepository, CourseRepository>();
             builder.Services.AddScoped<IExamRepository, ExamRepository>();
+            builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
 
             var app = builder.Build();
             await SeedService.SeedDatabase(app.Services);

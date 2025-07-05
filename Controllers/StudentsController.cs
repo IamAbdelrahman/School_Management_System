@@ -92,6 +92,8 @@ namespace School_Management_System.Controllers
                 Address = st.Address,
                 Class = st.Class,
                 ClassID = st.ClassID,
+                Enrollments = st.Enrollments.ToList(),
+                
             };
 
             return View(studentsViewModel);

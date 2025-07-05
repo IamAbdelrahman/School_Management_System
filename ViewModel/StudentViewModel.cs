@@ -31,10 +31,14 @@ namespace School_Management_System.ViewModel
         public string? Phone { get; set; }
 
         /*ForeignKeys*/
+        [Required(ErrorMessage ="Please select class")]
         [ForeignKey("Class")]
         [Display(Name = "Class")]
         public int? ClassID { get; set; }
         public Class? Class { get; set; }
+
+        public List<Enrollment>? Enrollments { get; set; }
+
 
 
     }
