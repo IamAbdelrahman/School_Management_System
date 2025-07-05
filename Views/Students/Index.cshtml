@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Index";
 
-
     var searchTerm = ViewBag.SearchTerm as string;
     var pageNumber = (int)ViewBag.PageNumber;
     var totalPages = (int)ViewBag.TotalPages;
@@ -12,44 +11,57 @@
 <h2 class="mb-4">🧑‍🏫 Students</h2>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    @* <a asp-action="Create" class="btn btn-success">➕ Add New Student</a> *@
+    <a asp-action="Create" asp-controller="Students" class="btn btn-success">➕ Add New Student</a>
 
-    <form method="get" asp-action="Index" class="d-flex" role="search">
-        <input type="text" name="searchTerm" class="form-control me-2" placeholder="🔍 Search by Student name" value="@searchTerm" />
+    <form method="get" asp-action="Index" asp-controller="Students" class="d-flex" role="search">
+        <input type="text" name="searchTerm" class="form-control me-2 w-100" placeholder="🔍 Search by Name" value="@searchTerm" />
         <button type="submit" class="btn btn-outline-primary">Search</button>
     </form>
 </div>
 
 <table class="table table-striped table-bordered shadow">
-    <thead>
+    <thead class="table-dark text-center">
         <tr>
-            <th>ID</th>
+            <th>#</th>
             <th>Student Name</th>
-            <th>Class Name</th>
             <th>Age</th>
             <th>Gender</th>
-            <th>Phone</th>
-            <th>Address</th>
+            <th>Class ID</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-         @if (Model != null && Model.Any())
+        @if (Model != null && Model.Any())
         {
             int i = 1 + (pageNumber - 1) * 5;
-            foreach(var s in Model)
+            foreach (var s in Model)
             {
                 <tr class="align-middle text-center">
                     <td>@s.StudentID</td>
                     <td>@s.Name</td>
-                    <td>@s.ClassName</td>
                     <td>@s.Age</td>
                     <td>@s.Gender</td>
-                    <td>@s.Phone</td>
-                    <td>@s.Address</td>
-
+                    <td>@s.ClassID</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@s.StudentID" class="btn btn-info btn-sm mx-1">
+                            <i class="bi bi-eye"></i> View
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@s.StudentID" class="btn btn-warning btn-sm mx-1">
+                            <i class="bi bi-pencil-square"></i> Edit
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@s.StudentID" class="btn btn-danger btn-sm mx-1">
+                            <i class="bi bi-trash"></i> Delete
+                        </a>
+                    </td>
                 </tr>
+                i++;
             }
-
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" class="text-center text-muted">No classes available.</td>
+            </tr>
         }
     </tbody>
 </table>

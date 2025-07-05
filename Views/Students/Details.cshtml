@@ -1,0 +1,28 @@
+﻿@model School_Management_System.ViewModel.StudentViewModel
+
+@{
+    ViewData["Title"] = "Details";
+
+}
+
+<h2 class="mb-4">🧑‍🏫 Student Details</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Student Name</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+            <dt class="col-sm-3">Student Age</dt>
+            <dd class="col-sm-9">@Model.Age</dd>
+            <dt class="col-sm-3">Student Phone</dt>
+            <dd class="col-sm-9">@Model.Phone</dd>
+            <dt class="col-sm-3">Student Address</dt>
+            <dd class="col-sm-9">@Model.Address</dd>
+            <dt class="col-sm-3">Assigned Class</dt>
+            <dd class="col-sm-9">@Model.Class?.Name</dd>
+
+        </dl>
+    </div>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Back to List</a>
