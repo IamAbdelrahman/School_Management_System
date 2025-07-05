@@ -21,7 +21,11 @@ namespace School_Management_System.Repositories.Implementations
         //GetByID
         public Student GetById(int id)
         {
-            return context.Students.FirstOrDefault(st => st.StudentID == id);
+            return context.Students
+                .Include(st => st.Class)
+                .Include(st => st.StudentExams)
+                .Include(st => st.Enrollments)
+                .FirstOrDefault(st => st.StudentID == id);
         }
 
         //GetAll
@@ -37,7 +41,7 @@ namespace School_Management_System.Repositories.Implementations
             context.Students.Remove(studentFromDB);
         }
 
-     
+
         public void ReseedTable(string tableName, int seedValue = 0)
         {
             throw new NotImplementedException();
@@ -53,6 +57,9 @@ namespace School_Management_System.Repositories.Implementations
             studentFromDb.Address = entity.Address;
             studentFromDb.Phone = entity.Phone;
             studentFromDb.Age = entity.Age;
+            studentFromDb.Gender = entity.Gender;
+            studentFromDb.ClassID = entity.ClassID;
+
         }
 
         //Save
@@ -69,16 +76,17 @@ namespace School_Management_System.Repositories.Implementations
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                query = query.Where(s => s.Name.Contains(searchTerm));
+                query = query.Where(s => s.Name.ToLower().Contains(searchTerm.ToLower()));
             }
 
             totalCount = query.Count();
 
             return query
-                .OrderBy(s => s.Name)
+                .OrderBy(s => s.StudentID)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
         }
     }
+
 }
