@@ -1,63 +1,38 @@
-﻿@using School_Management_System.ViewModel  
-@{  
-	ViewData["Title"] = "Departments";    
-}  
-@model List<DepartmentViewModel>  
-<h2 class="mb-4">🏢 Departments</h2>  
+﻿@model IEnumerable<DepartmentViewModel>
 
-<a asp-action="Create" class="btn btn-success mb-3">➕ Add New Department</a> 
-<div class="row mb-3">
-    <div class="col-md-6">
-        <input type="text" id="searchInput" class="form-control" placeholder="Search by department name...">
-    </div>
-</div>
+@{
+    ViewData["Title"] = "Departments";
+}
 
-<table class="table table-striped table-bordered shadow">  
-	<thead class="table-dark text-center">  
-		<tr>  
-			<th class="text-center">NO.</th>  
-            <th class="text-center">ID</th>
-			<th class="text-center">Department Name</th>  
-			<th class="text-center">Courses</th>
-			<th class="text-center">Teacher</th>	
-			<th>Actions</th>  
-		</tr>  
-	</thead>  
-	<tbody>  
-		@if (Model != null && Model.Any())
+<h1>Departments</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Teachers</th>
+            <th>Courses</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
         {
-            int i = 0;
-            foreach (var department in Model)
-            {
-                <tr class=" align-middle department-row" data-name="@department.Name.ToLower()">
-                    <td class="text-center">@i</td>
-                    <td>@department.DepartmentID</td>  
-					<td>@department.Name</td>
-					<td>@department.Courses</td> 
-					<td>@department.Teachers</td>
-
-					<td class="text-center">  
-						<a asp-action="Details" asp-route-id="@department.DepartmentID" class="btn btn-info btn-sm mx-1">  
-							<i class="bi bi-eye"></i> View  
-						</a>  
-						<a asp-action="Edit" asp-route-id="@department.DepartmentID" class="btn btn-warning btn-sm mx-1">  
-							<i class="bi bi-pencil-square"></i> Edit  
-						</a>  
-						<a asp-action="Delete" asp-route-id="@department.DepartmentID" class="btn btn-danger btn-sm mx-1">  
-							<i class="bi bi-trash"></i> Delete  
-						</a>  
-					</td>  
-				</tr>   
-                i++;
-			}  
-		}  
-		else  
-		{  
-			<tr>  
-				<td colspan="4" class="text-center text-muted">No departments available.</td>  
-			</tr>  
-		}  
-	</tbody>  
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.TeacherCount)</td>
+                <td>@Html.DisplayFor(modelItem => item.CourseCount)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.DepartmentID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.DepartmentID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.DepartmentID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
 
 @section Scripts {

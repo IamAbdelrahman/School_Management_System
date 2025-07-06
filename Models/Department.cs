@@ -13,7 +13,8 @@ public partial class Department
 {
     [Key]
     public int DepartmentID { get; set; }
-
+    [Required]
+    [StringLength(100)]
     public string Name { get; set; }
 
     [InverseProperty("Department")]

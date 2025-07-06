@@ -11,179 +11,125 @@ namespace School_Management_System.Controllers
     [Authorize(Roles = "Admin")]
     public class DepartmentsController : Controller
     {
-        private readonly IDepartmentRepository departmentRepo;
-        private readonly ICourseRepository courseRepo;
-        private readonly ITeacherRepository teacherRepo;
+        private readonly IDepartmentRepository _departmentRepository;
 
-        public DepartmentsController(IDepartmentRepository departmentRepo, ICourseRepository courseRepo,
-            ITeacherRepository teacherRepo)
+        public DepartmentsController(IDepartmentRepository departmentRepository)
         {
-            this.departmentRepo = departmentRepo;
-            this.courseRepo = courseRepo;
-            this.teacherRepo=teacherRepo;
+            _departmentRepository = departmentRepository;
         }
+
 
         public IActionResult Index()
         {
-            var courses = courseRepo.GetAll();
-            var departments = departmentRepo.GetAll();
-            var departmentVM = departments.Select(d => new DepartmentViewModel
-            {
-                DepartmentID = d.DepartmentID,
-                Name = d.Name,
-                Courses = string.Join(", ", d.Courses.Select(c => c.Name)),
-                Teachers = string.Join("- ", d.Teachers.Select(c => c.Name))
-            }).ToList();
-
-            return View(departmentVM);
+            var departments = _departmentRepository.GetAllDepartments();
+            return View(departments);
         }
-
-        public IActionResult Details(int id)
+        public IActionResult Details(int? id)
         {
-            var department = departmentRepo.GetById(id);
-            if (department == null) return NotFound();
-            var departmentVM = new DepartmentViewModel
+            if (id == null)
             {
-                DepartmentID = department.DepartmentID,
-                Name = department.Name,
-                Courses = string.Join("- ", department.Courses.Select(c => c.Name)),
-                Teachers = string.Join("- ", department.Teachers.Select(c => c.Name))
-            };
-            return View(departmentVM);
+                return NotFound();
+            }
+            var department = _departmentRepository.GetById(id.Value);
+            if (department == null)
+            {
+                return NotFound();
+            }
+            return View(department);
         }
-        [HttpGet]
         public IActionResult Create()
         {
-            var viewModel = new DepartmentViewModel
-            {
-                AllCourses = courseRepo.GetAll(),
-                AllTeachers = teacherRepo.GetAll()
-            };
-            return View(viewModel);
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(DepartmentViewModel model)
+        public IActionResult Create([Bind("DepartmentID,Name")] Department department)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                model.AllCourses = courseRepo.GetAll();
-                model.AllTeachers = teacherRepo.GetAll();
-                return View(model);
+                var maxId = _departmentRepository.GetAll().Any()
+                    ? _departmentRepository.GetAll().Max(d => d.DepartmentID)
+                    : 0;
+                department.DepartmentID = maxId + 1; 
+                _departmentRepository.Add(department);
+                _departmentRepository.SaveChanges(); 
+                return RedirectToAction(nameof(Index));
             }
-            var maxId = departmentRepo.GetAll().Any()
-                ? departmentRepo.GetAll().Max(c => c.DepartmentID)
-                : 0;
-            var dept = new Department
-            {
-                DepartmentID = maxId + 1,
-                Name = model.Name,
-                Courses = courseRepo.GetAll().Where(c => model.SelectedCourseIDs.Contains(c.CourseID)).ToList(),
-                Teachers = teacherRepo.GetAll().Where(t => model.SelectedTeacherIDs.Contains(t.TeacherID)).ToList()
-            };
-
-            departmentRepo.Add(dept);
-            departmentRepo.SaveChanges();
-            return RedirectToAction("Index");
+            return View(department);
         }
-        [HttpGet]
-        public IActionResult Edit(int id)
+
+
+        public  IActionResult Edit(int? id)
         {
-            var dept = departmentRepo.GetById(id);
-
-            if (dept == null)
-                return NotFound();
-
-            var viewModel = new DepartmentViewModel
+            if (id == null)
             {
-                DepartmentID = dept.DepartmentID,
-                Name = dept.Name,
-                AllCourses = courseRepo.GetAll(),
-                AllTeachers = teacherRepo.GetAll(),
-                SelectedCourseIDs = dept.Courses.Select(c => c.CourseID).ToList(),
-                SelectedTeacherIDs = dept.Teachers.Select(t => t.TeacherID).ToList()
-            };
+                return NotFound();
+            }
 
-            return View(viewModel);
+            var department =  _departmentRepository.GetById(id.Value);
+            if (department == null)
+            {
+                return NotFound();
+            }
+            return View(department);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(DepartmentViewModel model)
+        public IActionResult Edit(int id, [Bind("DepartmentID,Name")] Department department)
         {
-            if (!ModelState.IsValid)
+            if (id != department.DepartmentID)
             {
-                model.AllCourses = courseRepo.GetAll();
-                model.AllTeachers = teacherRepo.GetAll();
-                return View(model);
-            }
-
-            var dept = departmentRepo.GetById(model.DepartmentID);
-
-            if (dept == null)
                 return NotFound();
-
-            dept.Name = model.Name;
-
-            // Update Courses
-            dept.Courses.Clear();
-            var selectedCourses = courseRepo.GetAll().Where(c => model.SelectedCourseIDs.Contains(c.CourseID)).ToList();
-            foreach (var course in selectedCourses)
-            {
-                dept.Courses.Add(course);
             }
 
-            // Update Teachers
-            dept.Teachers.Clear();
-            var selectedTeachers = teacherRepo.GetAll().Where(t => model.SelectedTeacherIDs.Contains(t.TeacherID)).ToList();
-            foreach (var teacher in selectedTeachers)
+            if (ModelState.IsValid)
             {
-                dept.Teachers.Add(teacher);
+                try
+                {
+                     _departmentRepository.Update(department);
+                    _departmentRepository.SaveChanges(); 
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (! _departmentRepository.GetAll().Any(d => d.DepartmentID == id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
             }
-
-            departmentRepo.Update(dept);
-            departmentRepo.SaveChanges();
-            return RedirectToAction(nameof(Index));
+            return View(department);
         }
 
 
-        public IActionResult Delete(int id)
+        public IActionResult Delete(int? id)
         {
-            var dept = departmentRepo.GetById(id);
-
-            if (dept == null)
-                return NotFound();
-
-            var viewModel = new DepartmentViewModel
+            if (id == null)
             {
-                DepartmentID = dept.DepartmentID,
-                Name = dept.Name,
-                Courses = string.Join(", ", dept.Courses.Select(c => c.Name)),
-                Teachers = string.Join(", ", dept.Teachers.Select(t => t.Name))
-            };
+                return NotFound();
+            }
 
-            return View(viewModel);
+            var department =  _departmentRepository.GetById(id.Value);
+            if (department == null)
+            {
+                return NotFound();
+            }
+
+            return View(department);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public  IActionResult DeleteConfirmed(int id)
         {
-            var dept = departmentRepo.GetById(id);
-
-            if (dept == null)
-                return NotFound();
-
-            if (dept.Courses.Any() || dept.Teachers.Any())
-            {
-                TempData["Error"] = "Cannot delete department because it has assigned teachers or courses.";
-                return RedirectToAction(nameof(Delete), new { id });
-            }
-
-            departmentRepo.Delete(id);
-            departmentRepo.SaveChanges();
-            TempData["Success"] = "Department deleted successfully.";
+             _departmentRepository.Delete(id);
+            _departmentRepository.SaveChanges(); 
             return RedirectToAction(nameof(Index));
         }
     }
