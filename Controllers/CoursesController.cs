@@ -8,6 +8,7 @@ using School_Management_System.Repositories.Implementations;
 using School_Management_System.Repositories.Interfaces;
 using School_Management_System.ViewModel;
 using System;
+using System.IO;
 
 namespace School_Management_System.Controllers
 {
@@ -124,16 +125,34 @@ namespace School_Management_System.Controllers
     public class CoursesController : Controller
     {
         private readonly ICourseRepository _courseRepository;
-
-        public CoursesController(ICourseRepository courseRepository)
+        private readonly IDepartmentRepository _depRepo;
+        private readonly ITeacherRepository _teacherRepo;
+        public CoursesController(ICourseRepository courseRepository, IDepartmentRepository depRepo, ITeacherRepository teacherRepo)
         {
             _courseRepository = courseRepository;
+            _depRepo=depRepo;
+            _teacherRepo=teacherRepo;
         }
-
-        public IActionResult Index()
+        public IActionResult Index(string? searchTerm, int pageNumber = 1, int pageSize = 5)
         {
-            var courses =  _courseRepository.GetAllCoursesViewModel();
-            return View(courses);
+            var courses = _courseRepository.GetPagedAndFiltered(searchTerm, pageNumber, pageSize, out int totalCount);
+            var courseVM = courses.Select(c => new CourseViewModel
+            {
+                Id = c.CourseID,
+                Title = c.Name,
+                Description = c.Description,
+                DepartmentId = c.DepartmentID,
+                DepartmentName = c.Department != null ? c.Department.Name : "-",
+                TeacherId = c.TeacherID,
+                TeacherName = c.Teacher != null ? c.Teacher.Name : "-"
+            }).ToList();
+
+            ViewBag.SearchTerm = searchTerm;
+            ViewBag.PageNumber = pageNumber;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+            return View(courseVM);
+
         }
 
         public IActionResult Details(int id)
@@ -146,10 +165,21 @@ namespace School_Management_System.Controllers
 
             return View(course);
         }
+        // GET: Create
         public IActionResult Create()
         {
-            ViewBag.Departments =  _courseRepository.GetDepartments();
-            ViewBag.Teachers =  _courseRepository.GetTeachers();
+            ViewBag.Departments = _courseRepository.GetDepartments()
+                .Select(d => new SelectListItem
+                {
+                    Value = d.DepartmentID.ToString(),
+                    Text = $"{d.Name} (ID: {d.DepartmentID})"
+                }).ToList();
+            ViewBag.Teachers = _courseRepository.GetTeachers()
+                .Select(t => new SelectListItem
+                {
+                    Value = t.TeacherID.ToString(),
+                    Text = $"{t.Name} (ID: {t.TeacherID})"
+                }).ToList();
             return View();
         }
 
@@ -159,12 +189,14 @@ namespace School_Management_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                 _courseRepository.CreateCourse(course);
+                _courseRepository.CreateCourse(course);
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Departments =  _courseRepository.GetDepartments();
-            ViewBag.Teachers =  _courseRepository.GetTeachers();
+            // CRITICAL: Re-populate ViewBag data when validation fails
+            ViewBag.Departments = _courseRepository.GetDepartments();
+            ViewBag.Teachers = _courseRepository.GetTeachers();
+
             return View(course);
         }
 

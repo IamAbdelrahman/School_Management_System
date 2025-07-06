@@ -17,5 +17,7 @@ namespace School_Management_System.Repositories.Interfaces
         public bool CourseExists(int id);
         public IEnumerable<Department> GetDepartments();
         public IEnumerable<Teacher> GetTeachers();
+        public IEnumerable<Course> GetPagedAndFiltered(string? searchTerm, int pageNumber, int pageSize, out int totalCount);
+
     }
 }

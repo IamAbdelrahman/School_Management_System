@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white text-center">
+                    <h3>🚫 Access Denied</h3>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <div class="text-danger" style="font-size: 4rem;">⚠</div>
+                    </div>
+                    <h4 class="text-danger">You don't have permission to access this page</h4>
+                    <p class="text-muted">
+                        Sorry, you don't have the required permissions to view this content.
+                        This page requires specific role permissions that your account doesn't have.
+                    </p>
+
+                    @if (ViewData["ReturnUrl"] != null)
+                    {
+                        <div class="alert alert-info">
+                            <small>You were trying to access: <strong>@Html.Raw(System.Web.HttpUtility.UrlDecode(ViewData["ReturnUrl"].ToString()))</strong></small>
+                        </div>
+                    }
+
+                    <div class="mt-4">
+                        <a href="@Url.Action("Index", "Home")" class="btn btn-primary me-2">
+                            🏠 Go to Home
+                        </a>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <p class="mt-3 text-muted">
+                                Logged in as: <strong>@User.Identity.Name</strong>
+                            </p>
+                            <form asp-action="Logout" asp-controller="Account" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-secondary">
+                                    🚪 Logout
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Login", "Account")" class="btn btn-success">
+                                🔐 Login
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -63,6 +63,11 @@ namespace School_Management_System.Controllers
         {
             return View();
         }
+        public IActionResult AccessDenied(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]

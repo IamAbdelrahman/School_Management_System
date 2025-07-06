@@ -140,7 +140,7 @@ namespace School_Management_System.Repositories.Implementations
                 .ToList();
             return courses.Any() ? courses : Enumerable.Empty<CourseViewModel>();
         }
-        
+
 
         CourseViewModel ICourseRepository.GetCourseByIdViewModel(int id)
         {
@@ -192,6 +192,25 @@ namespace School_Management_System.Repositories.Implementations
             if (teachers == null || !teachers.Any())
                 return Enumerable.Empty<Teacher>();
             return teachers;
+        }
+
+        public IEnumerable<Course> GetPagedAndFiltered(string? searchTerm, int pageNumber, int pageSize, out int totalCount)
+        {
+            var query = db.Courses
+                .Include(c => c.Department)
+                .Include(c => c.Teacher)
+                .Include(c => c.Enrollments)
+                .AsQueryable();
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                query = query.Where(c => c.Name.ToLower().Contains(searchTerm.ToLower()));
+            }
+            totalCount = query.Count();
+            return query
+                .OrderBy(c => c.CourseID)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
         }
     }
 }
