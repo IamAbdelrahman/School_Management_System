@@ -2,9 +2,11 @@
 using School_Management_System.Models;
 using School_Management_System.Repositories.Interfaces;
 using School_Management_System.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace School_Management_System.Controllers
 {
+    [Authorize(Roles = "Admin,Teacher, Parent")]
     public class StudentsController : Controller
     {
         IStudentRepository stRepo;
