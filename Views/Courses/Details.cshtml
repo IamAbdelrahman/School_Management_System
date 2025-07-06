@@ -1,12 +1,12 @@
-﻿@using School_Management_System.ViewModel
+﻿@model School_Management_System.ViewModel.CourseViewModel
 
 @{
     ViewData["Title"] = "Details";
+
 }
 
-@model CourseViewModel
+<h2 class="mb-4">📚 Courses</h2>
 
-<h2 class="mb-4">📚 Course Details</h2>
 <div class="card shadow-sm mb-4">
     <div class="card-body">
         <dl class="row">
@@ -14,45 +14,36 @@
             <dd class="col-sm-9">@Model.Title</dd>
             <dt class="col-sm-3">Course Description</dt>
             <dd class="col-sm-9">@Model.Description</dd>
-            <dt class="col-sm-3">Course Department</dt>
+            <dt class="col-sm-3">Assigned Department</dt>
             <dd class="col-sm-9">@Model.DepartmentName</dd>
-            <dt class="col-sm-3">Course Teacher</dt>
+            <dt class="col-sm-3">Assigned Teacher</dt>
             <dd class="col-sm-9">@Model.TeacherName</dd>
+
         </dl>
     </div>
 </div>
 
-<a asp-action="Index" class="btn btn-secondary mt-3">Back to List</a>
+<h5 class="mb-3">🧑‍🏫 Students</h5>
 
-
-
-
-@* 
-<h2 class="mb-4">🧑‍🏫 Student Details</h2>
-
-
-
-<h5 class="mb-3">📚 Courses</h5>
-
-@if (Model.Enrollments != null && Model.Enrollments.Any())
+@if (Model.EnrolledStudents != null && Model.EnrolledStudents.Any())
 {
     <table class="table table-bordered table-striped shadow-sm">
         <thead class="table-light">
             <tr>
-                <th>Enrollment ID</th>
-                <th>Course Name</th>
-                <th>Course Description</th>
-                <th>Enrollment Date</th>
+                <th>Student ID</th>
+                <th>Student Name</th>
+                <th>Studnet Age</th>
+                <th>Assigned Class</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var student in Model.Enrollments)
+            @foreach (var student in Model.EnrolledStudents)
             {
                 <tr>
-                    <td>@student.EnrollmentID</td>
-                    <td>@student.Course.Name</td>
-                    <td>@student.Course.Description</td>
-                    <td>@student.EnrollmentDate</td>
+                    <td>@student.StudentID</td>
+                    <td>@student.Name</td>
+                    <td>@student.Age</td>
+                    <td>@student.Class?.Name</td>
                 </tr>
             }
         </tbody>
@@ -61,4 +52,5 @@
 else
 {
     <p class="text-muted">No students assigned to this class.</p>
-} *@
+}
+<a asp-action="Index" class="btn btn-secondary mt-3">Back to List</a>

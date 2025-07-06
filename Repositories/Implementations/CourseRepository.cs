@@ -28,6 +28,8 @@ namespace School_Management_System.Repositories.Implementations
                 .Include(c => c.Teacher)
                 .Include(c => c.Department)
                 .Include(c => c.Enrollments)
+                   .ThenInclude(e => e.Student)
+                     .ThenInclude(s => s.Class)
                 .FirstOrDefault(c => c.CourseID == id);
         }
 

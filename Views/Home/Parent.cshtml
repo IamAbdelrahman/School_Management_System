@@ -13,7 +13,10 @@
                 <div class="card-body">
                     <h5 class="card-title">My Courses</h5>
                     <p class="card-text">Browse your active course enrollments.</p>
-                    <a asp-controller="Courses" asp-action="Index" class="btn btn-success w-100">View Courses</a>
+                    @{
+                        var id = Context.Session.GetInt32("Code");
+                    }
+                    <a asp-controller="Students" asp-action="Details" asp-route-id="@(id)" class="btn btn-success w-100">View Courses</a>
                 </div>
             </div>
         </div>
@@ -23,9 +26,9 @@
                     <h5 class="card-title">Exam Results</h5>
                     <p class="card-text">Check your grades and performance.</p>
                     @{
-                        var id = Context.Session.GetInt32("Code");
+                        var id2 = Context.Session.GetInt32("Code");
                     }
-                    <a asp-controller="Exams" asp-action="Details" asp-route-id="@(id)" class="btn btn-secondary w-100">View Results</a>
+                    <a asp-controller="StudentExam" asp-action="Details" asp-route-id="@(id2)" class="btn btn-secondary w-100">View Results</a>
                 </div>
             </div>
         </div>

@@ -1,54 +1,74 @@
-﻿using Microsoft.EntityFrameworkCore;
-using School_Management_System.Models;
+﻿using School_Management_System.Models;
 using School_Management_System.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace School_Management_System.Repositories.Implementations
 {
-    public class StudentExamRepository:IStudentExamRepository
+    public class StudentExamRepository : IStudentExamRepository
     {
-        private readonly ITIContext db;
-        public StudentExamRepository(ITIContext dbcontext)
+        private readonly ITIContext _context;
+
+        public StudentExamRepository(ITIContext context)
         {
-            db = dbcontext;
+            _context = context;
         }
+
+        public void Add(StudentExam entity)
+        {
+            int maxId = _context.StudentExams.Any()
+                ? _context.StudentExams.Max(se => se.StudentExamID)
+                : 0;
+
+            entity.StudentExamID = maxId + 1;
+
+            _context.StudentExams.Add(entity);
+        }
+
+
+        public void Delete(int id)
+        {
+            var studentExam = _context.StudentExams.Find(id);
+            if (studentExam != null)
+            {
+                _context.StudentExams.Remove(studentExam);
+            }
+        }
+
         public IEnumerable<StudentExam> GetAll()
         {
-            return db.StudentExams.Include(s => s.Student)
-                                  .Include(s => s.Exam)
-                                  .ToList();
+            return _context.StudentExams
+                .Include(se => se.Student)
+                .Include(se => se.Exam)
+                .ToList();
         }
 
-        void IRepository<StudentExam>.Add(StudentExam entity)
+        public StudentExam GetById(int id)
         {
-            db.Add(entity);
+            return _context.StudentExams
+                .Include(se => se.Student)
+                .Include(se => se.Exam)
+                .FirstOrDefault(se => se.StudentExamID == id);
         }
 
-        void IRepository<StudentExam>.Delete(int id)
+        public StudentExam GetStudentExamById(int id)
         {
-            db.Remove(db.StudentExams.Find(id));
+            return GetById(id);
         }
 
-        StudentExam IRepository<StudentExam>.GetById(int id)
+        public void Update(StudentExam entity)
         {
-            return db.StudentExams.Include(s => s.Student)
-                                  .Include(s => s.Exam)
-                                  .FirstOrDefault(s => s.StudentExamID == id)
-                ?? throw new KeyNotFoundException($"StudentExam with ID {id} not found.");
+            _context.StudentExams.Update(entity);
         }
 
-        void IRepository<StudentExam>.ReseedTable(string tableName, int seedValue)
+        public void SaveChanges()
         {
-            throw new NotImplementedException();
+            _context.SaveChanges();
         }
 
-        void IRepository<StudentExam>.SaveChanges()
+        public void ReseedTable(string tableName, int seedValue = 0)
         {
-           db.SaveChanges();
-        }
-
-        void IRepository<StudentExam>.Update(StudentExam entity)
-        {
-            db.Update(entity);
+            string sql = $"DBCC CHECKIDENT ('{tableName}', RESEED, {seedValue})";
+            _context.Database.ExecuteSqlRaw(sql);
         }
     }
 }

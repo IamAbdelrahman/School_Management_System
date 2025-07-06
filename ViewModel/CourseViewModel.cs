@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using School_Management_System.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace School_Management_System.ViewModel
 {
@@ -26,5 +27,9 @@ namespace School_Management_System.ViewModel
         public string? DepartmentName { get; set; }
         public string? TeacherName { get; set; }
         public List<StudentViewModel>? EnrolledStudents { get; set; }
+
+        public Class? Class { get; set; }
+
+
     }
 }

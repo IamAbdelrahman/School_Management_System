@@ -198,23 +198,34 @@ namespace School_Management_System.Controllers
             ViewData["Departments"] = deptRepo.GetAll();
             return View("Edit", crsFromReq);
         }
+
+
+        //////////////////////////////Details
         public IActionResult Details(int id)
         {
             var course = crsRepo.GetById(id);
-            if (course == null)
-                return NotFound();
             var courseViewModel = new CourseViewModel
             {
-                Id = course.CourseID,
                 Title = course.Name,
                 Description = course.Description,
                 TeacherId = course.TeacherID,
                 DepartmentId = course.DepartmentID,
-                TeacherName = course.Teacher?.Name,
-                DepartmentName = course.Department?.Name
+                DepartmentName = course.Department?.Name ?? "No Department Assigned",
+                TeacherName = course.Teacher?.Name ?? "No Teacher Assigned",
+                EnrolledStudents = course.Enrollments?
+                     .Where(e => e.Student != null)
+                     .Select(e => new StudentViewModel
+                     {
+                         StudentID = e.Student.StudentID,
+                         Name = e.Student.Name,
+                         Age = e.Student.Age,
+                         Class = e.Student.Class
+                     }).ToList()
             };
-            return View("Details", courseViewModel);
+
+            return View(courseViewModel);
         }
+
 
     }
 }

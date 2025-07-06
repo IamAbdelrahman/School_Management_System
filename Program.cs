@@ -51,7 +51,7 @@ namespace School_Management_System
             builder.Services.AddScoped<ICourseRepository, CourseRepository>();
             builder.Services.AddScoped<IExamRepository, ExamRepository>();
             builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
-
+            builder.Services.AddScoped<IStudentExamRepository, StudentExamRepository>();
             var app = builder.Build();
             await SeedService.SeedDatabase(app.Services);
             // Configure the HTTP request pipeline.
