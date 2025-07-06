@@ -59,7 +59,6 @@ namespace School_Management_System.Controllers
             return View(model);
         }
 
-
         public IActionResult Register()
         {
             return View();

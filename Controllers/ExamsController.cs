@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using School_Management_System.Models;
 using School_Management_System.Repositories.Interfaces;
@@ -6,6 +7,7 @@ using School_Management_System.ViewModel;
 
 namespace School_Management_System.Controllers
 {
+    [Authorize(Roles = "Admin,Teacher")]
     public class ExamsController : Controller
     {
         private readonly IExamRepository _examRepo;
