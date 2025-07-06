@@ -5,6 +5,7 @@ using School_Management_System.Repositories.Interfaces;
 using System.Diagnostics.Eventing.Reader;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using FuzzySharp;
+using School_Management_System.ViewModel;
 namespace School_Management_System.Repositories.Implementations
 {
     public class CourseRepository : ICourseRepository
@@ -98,7 +99,6 @@ namespace School_Management_System.Repositories.Implementations
             if (entity == null) throw new ArgumentNullException(nameof(entity), "Course entity cannot be null.");
             if (entity.CourseID <= 0) throw new ArgumentException("Invalid course ID.", nameof(entity.CourseID));
             db.Update(entity);
-            db.SaveChanges();
         }
 
         public IEnumerable<Course> GetCoursesByStudentId(int studentId)
@@ -111,25 +111,76 @@ namespace School_Management_System.Repositories.Implementations
             db.Database.ExecuteSqlRaw(sql);
         }
 
-        public IEnumerable<Course> GetCourseWithDepartments()
+        IEnumerable<CourseViewModel> ICourseRepository.GetAllCoursesViewModel()
         {
-            return db.Courses
+            var courses = db.Courses
                 .Include(c => c.Department)
-                .ToList();
-        }
-        public IEnumerable<Course> GetCourseWithTeachers()
-        {
-            return db.Courses
-            .Include(c => c.Teacher)
-            .ToList();
-        }
-        public IEnumerable<Course> GetCoursesByTeachersAndDepartments()
-        {
-            return db.Courses
                 .Include(c => c.Teacher)
-                .Include(c => c.Department)
+                .Select(c => new CourseViewModel
+                {
+                    Id = c.CourseID,
+                    Title = c.Name,
+                    Description = c.Description,
+                    DepartmentId = c.Department.DepartmentID,
+                    DepartmentName = c.Department.Name,
+                    TeacherId = c.Teacher.TeacherID,
+                    TeacherName = c.Teacher.Name
+                })
                 .ToList();
+            return courses.Any() ? courses : Enumerable.Empty<CourseViewModel>();
+        }
+        
+
+        CourseViewModel ICourseRepository.GetCourseByIdViewModel(int id)
+        {
+            var course = db.Courses.Include(c => c.Department)
+                .Include(c => c.Teacher)
+                .SingleOrDefault(c => c.CourseID == id) ?? throw new KeyNotFoundException($"Course with ID {id} not found.");
+            var courseVM = new CourseViewModel
+            {
+                Id = course.CourseID,
+                Title = course.Name,
+                Description = course.Description,
+                DepartmentId = course.DepartmentID ?? 0,
+                DepartmentName = course.Department?.Name ?? "N/A",
+                TeacherId = course.TeacherID ?? 0,
+                TeacherName = course.Teacher?.Name ?? "N/A"
+            };
+            return courseVM;
         }
 
+        void ICourseRepository.UpdateCourseViewModel(CourseViewModel courseViewModel)
+        {
+            if (courseViewModel == null) throw new ArgumentNullException(nameof(courseViewModel), "CourseViewModel cannot be null.");
+            var course = db.Courses.Find(courseViewModel.Id) ?? throw new KeyNotFoundException($"Course with ID {courseViewModel.Id} not found.");
+            course.Name = courseViewModel.Title;
+            course.Description = courseViewModel.Description;
+            course.DepartmentID = courseViewModel.DepartmentId;
+            course.TeacherID = courseViewModel.TeacherId;
+            db.Update(course);
+            db.SaveChanges();
+        }
+
+        bool ICourseRepository.CourseExists(int id)
+        {
+            if (id <= 0) throw new ArgumentException("Invalid course ID.", nameof(id));
+            return db.Courses.Any(c => c.CourseID == id);
+        }
+
+        IEnumerable<Department> ICourseRepository.GetDepartments()
+        {
+            var departments = db.Departments.ToList();
+            if (departments == null || !departments.Any())
+                return Enumerable.Empty<Department>();
+            return departments;
+        }
+
+        IEnumerable<Teacher> ICourseRepository.GetTeachers()
+        {
+            var teachers = db.Teachers.ToList();
+            if (teachers == null || !teachers.Any())
+                return Enumerable.Empty<Teacher>();
+            return teachers;
+        }
     }
 }
