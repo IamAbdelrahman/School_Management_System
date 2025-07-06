@@ -10,100 +10,187 @@ namespace School_Management_System.Controllers
     //[Authorize(Roles = "Admin,Teacher")]
     public class TeachersController : Controller
     {
-        private readonly ITeacherRepository _repo;
-        private readonly IDepartmentRepository _deptRepo;
+        private readonly ITeacherRepository _teacherRepo;
+        private readonly IDepartmentRepository _departmentRepo;
+        private const int PageSize = 5;
 
-        public TeachersController(ITeacherRepository repo, IDepartmentRepository deptRepo)
+        public TeachersController(ITeacherRepository teacherRepo, IDepartmentRepository departmentRepo)
         {
-            _repo = repo;
-            _deptRepo = deptRepo;
+            _teacherRepo = teacherRepo;
+            _departmentRepo = departmentRepo;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string? searchTerm, int pageNumber = 1)
         {
-            var techers = _repo.GetAll();
-            var teacherVM = techers.Select(t => new TeacherViewModel
+            var totalCount = _teacherRepo.CountTeachers(searchTerm);
+            var teachers = _teacherRepo.GetPaginatedTeachers(pageNumber, PageSize, searchTerm);
+
+            var viewModels = teachers.Select(t => new TeacherViewModel
             {
                 Id = t.TeacherID,
                 Name = t.Name,
-                HireDate = t.HireDate,
-                DepartmentName = t.Department?.Name,
                 Phone = t.Phone,
                 Email = t.Email,
-                Role = t.Role
+                HireDate = t.HireDate,
+                Role = t.Role,
+                DepartmentName = t.Department?.Name,
+                ClassCount = t.Classes?.Count ?? 0,
+                CourseCount = t.Courses?.Count ?? 0
             }).ToList();
-            return View(teacherVM);
+
+            ViewBag.SearchTerm = searchTerm;
+            ViewBag.PageNumber = pageNumber;
+            ViewBag.TotalPages = (int)Math.Ceiling(totalCount / (double)PageSize);
+
+            return View(viewModels);
         }
+
         public IActionResult Details(int id)
         {
-            var teacher = _repo.GetById(id);
+            var teacher = _teacherRepo.GetById(id);
             if (teacher == null) return NotFound();
-            var teacherVM = new TeacherViewModel
+
+            var viewModel = new TeacherViewModel
             {
                 Id = teacher.TeacherID,
                 Name = teacher.Name,
-                HireDate = teacher.HireDate,
-                DepartmentName = teacher.Department?.Name,
                 Phone = teacher.Phone,
                 Email = teacher.Email,
-                Role = teacher.Role
+                HireDate = teacher.HireDate,
+                Role = teacher.Role,
+                DepartmentName = teacher.Department?.Name,
+                ClassCount = teacher.Classes?.Count ?? 0,
+                CourseCount = teacher.Courses?.Count ?? 0
             };
-            return View(teacherVM);
-        }
-        public IActionResult Create()
-        {
-            ViewBag.Departments = new SelectList(_deptRepo.GetAll(), "Id", "Name");
-            return View();
+
+            // Send class/course names
+            ViewBag.Classes = teacher.Classes?.Select(c => c.Name).ToList();
+            ViewBag.Courses = teacher.Courses?.Select(c => c.Name).ToList();
+
+            return View(viewModel);
         }
 
-        [HttpPost]
-        public IActionResult Save_Teacher(Teacher teacher)
+        public IActionResult Create()
         {
-            if (ModelState.IsValid)
+            var viewModel = new TeacherViewModel
             {
-                try
-                {
-                    _repo.Add(teacher);
-                    _repo.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", "An error occurred while saving the teacher: " + ex.Message);
-                    return View("New", teacher);
-                }
-            }
-            else
+                Departments = _departmentRepo.GetAll()
+                    .Select(d => new SelectListItem { Value = d.DepartmentID.ToString(), Text = d.Name }).ToList()
+            };
+
+            return View(viewModel);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(TeacherViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
             {
-                return View("New", teacher);
+                viewModel.Departments = _departmentRepo.GetAll()
+                    .Select(d => new SelectListItem { Value = d.DepartmentID.ToString(), Text = d.Name }).ToList();
+                return View(viewModel);
             }
+            var maxId = _teacherRepo.GetAll().Any()
+                     ? _teacherRepo.GetAll().Max(t => t.TeacherID)
+                     : 0;
+            var teacher = new Teacher
+            {
+                TeacherID = maxId +1,
+                Name = viewModel.Name,
+                Phone = viewModel.Phone,
+                Email = viewModel.Email,
+                HireDate = viewModel.HireDate,
+                Role = viewModel.Role,
+                DepartmentID = viewModel.DepartmentId
+            };
+
+            _teacherRepo.Add(teacher);
+            _teacherRepo.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         public IActionResult Edit(int id)
         {
-            var teacher = _repo.GetById(id);
+            var teacher = _teacherRepo.GetById(id);
             if (teacher == null) return NotFound();
 
-            ViewBag.Departments = new SelectList(_deptRepo.GetAll(), "Id", "Name", teacher.DepartmentID);
-            return View(teacher);
+            var viewModel = new TeacherViewModel
+            {
+                Id = teacher.TeacherID,
+                Name = teacher.Name,
+                Phone = teacher.Phone,
+                Email = teacher.Email,
+                HireDate = teacher.HireDate,
+                Role = teacher.Role,
+                DepartmentId = teacher.DepartmentID ?? 0,
+                Departments = _departmentRepo.GetAll()
+                    .Select(d => new SelectListItem { Value = d.DepartmentID.ToString(), Text = d.Name }).ToList()
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult Update_Teacher(Teacher teacher)
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(TeacherViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Departments = new SelectList(_deptRepo.GetAll(), "Id", "Name", teacher.DepartmentID);
-                return View(teacher);
+                viewModel.Departments = _departmentRepo.GetAll()
+                    .Select(d => new SelectListItem { Value = d.DepartmentID.ToString(), Text = d.Name }).ToList();
+                return View(viewModel);
             }
 
-            _repo.Update(teacher);
+            var teacher = _teacherRepo.GetById(viewModel.Id);
+            if (teacher == null) return NotFound();
+
+            teacher.Name = viewModel.Name;
+            teacher.Phone = viewModel.Phone;
+            teacher.Email = viewModel.Email;
+            teacher.HireDate = viewModel.HireDate;
+            teacher.Role = viewModel.Role;
+            teacher.DepartmentID = viewModel.DepartmentId;
+
+            _teacherRepo.Update(teacher);
+            _teacherRepo.SaveChanges();
+
             return RedirectToAction("Index");
         }
 
         public IActionResult Delete(int id)
         {
-            _repo.Delete(id);
+            var teacher = _teacherRepo.GetById(id);
+            if (teacher == null) return NotFound();
+
+            var viewModel = new TeacherViewModel
+            {
+                Id = teacher.TeacherID,
+                Name = teacher.Name,
+                DepartmentName = teacher.Department?.Name,
+                ClassCount = teacher.Classes?.Count ?? 0,
+                CourseCount = teacher.Courses?.Count ?? 0
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var teacher = _teacherRepo.GetById(id);
+            if (teacher == null) return NotFound();
+
+            if (teacher.Classes.Any() || teacher.Courses.Any())
+            {
+                TempData["Error"] = "Cannot delete this teacher because they are assigned to classes or courses.";
+                return RedirectToAction("Delete", new { id });
+            }
+
+            _teacherRepo.Delete(id);
+            _teacherRepo.SaveChanges();
             return RedirectToAction("Index");
         }
 

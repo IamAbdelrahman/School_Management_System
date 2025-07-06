@@ -84,7 +84,7 @@ public partial class ITIContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<StudentExam>(entity =>
         {
-            entity.Property(e => e.StudentExamID).ValueGeneratedNever();
+            entity.Property(e => e.StudentExamID).ValueGeneratedOnAdd();
             entity.HasOne(d => d.Exam).WithMany(p => p.StudentExams).HasConstraintName("FK_StudentExam_Exam");
             entity.HasOne(d => d.Student).WithMany(p => p.StudentExams).HasConstraintName("FK_StudentExam_Student");
         });

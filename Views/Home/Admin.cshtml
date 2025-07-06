@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="text-primary">Welcome to Admin Dashboard</h1>
+        <p class="lead">Manage the entire school system</p>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card shadow-lg border-start border-primary border-5">
+                <div class="card-body">
+                    <h5 class="card-title">Manage Teachers</h5>
+                    <p class="card-text">Add, update, or delete teacher records.</p>
+                    <a asp-controller="Teachers" asp-action="Index" class="btn btn-outline-primary w-100">Go</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-lg border-start border-success border-5">
+                <div class="card-body">
+                    <h5 class="card-title">Manage Students</h5>
+                    <p class="card-text">Enroll and monitor students' performance.</p>
+                    <a asp-controller="Students" asp-action="Index" class="btn btn-outline-success w-100">Go</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-lg border-start border-danger border-5">
+                <div class="card-body">
+                    <h5 class="card-title">Manage Courses</h5>
+                    <p class="card-text">Control course offerings and details.</p>
+                    <a asp-controller="Courses" asp-action="Index" class="btn btn-outline-danger w-100">Go</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

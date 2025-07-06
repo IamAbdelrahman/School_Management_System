@@ -1,0 +1,31 @@
+﻿@model StudentExam
+
+@{
+    ViewData["Title"] = "Student Exam Details";
+}
+
+<h2 class="mb-4">Student Exam Details</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5 class="card-title">🧾 Student Exam Information</h5>
+        <dl class="row">
+            <dt class="col-sm-3">Student Exam ID</dt>
+            <dd class="col-sm-9">@Model.StudentExamID</dd>
+
+            <dt class="col-sm-3">Student</dt>
+            <dd class="col-sm-9">@Model.Student.Name </dd>
+
+            <dt class="col-sm-3">Exam Type</dt>
+            <dd class="col-sm-9">@Model.Exam.Type </dd>
+
+            <dt class="col-sm-3">Exam Grade</dt>
+            <dd class="col-sm-9">@Model.Exam.Grade </dd>
+
+            <dt class="col-sm-3">Student Grade</dt>
+            <dd class="col-sm-9">@Model.StudentGrade </dd>
+        </dl>
+    </div>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">⬅️ Back to Student Exams</a>

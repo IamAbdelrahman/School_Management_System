@@ -56,18 +56,6 @@
     </style>
 </head>
 <body>
-
-    <!-- 🔵 Topbar -->
-    <div class="topbar">
-        <div class="container d-flex justify-content-between">
-            <div class="left">🏫 Future Gate School</div>
-            <div class="right">
-                <span class="me-3"><i class="bi bi-clock"></i> 08:00 AM - 03:00 PM</span>
-                <span><i class="bi bi-geo-alt"></i> Cairo, Egypt</span>
-            </div>
-        </div>
-    </div>
-
     <!-- 🔻 Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
@@ -85,6 +73,19 @@
                     <li class="nav-item"><a class="nav-link" asp-controller="Classes" asp-action="Index">Classes</a></li>
                     <li class="nav-item"><a class="nav-link" asp-controller="Exams" asp-action="Index">Exams</a></li>
                     <li class="nav-item"><a class="nav-link" asp-controller="Enrollments" asp-action="Index">Enrollments</a></li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Admin">Admin</a>
+                        </li>
+                    }
+                    @if (User.IsInRole("User"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="User">Users</a>
+                        </li>
+                    }
+                    <partial name="_LoginPartial" />
                 </ul>
             </div>
         </div>

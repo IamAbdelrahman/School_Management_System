@@ -4,9 +4,11 @@ namespace School_Management_System.Repositories.Interfaces
 {
     public interface ITeacherRepository:IRepository<Teacher>
     {
-        public IEnumerable<Teacher> GetTeachersByDepartmentId(int departmentId);
-        public IEnumerable<Teacher> GetTeachersByName(string name);
-        public IEnumerable<Teacher> GetTeachersByRole(string role);
+        IEnumerable<Teacher> GetTeachersByDepartmentId(int departmentId);
+        IEnumerable<Teacher> GetTeachersByName(string name);
+        IEnumerable<Teacher> GetTeachersByRole(string role);
+        IEnumerable<Teacher> GetPaginatedTeachers(int pageNumber, int pageSize, string? searchTerm);
+        int CountTeachers(string? searchTerm);
 
     }
 }

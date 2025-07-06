@@ -15,8 +15,15 @@ namespace School_Management_System.Repositories.Implementations
 
         public void Add(StudentExam entity)
         {
+            int maxId = _context.StudentExams.Any()
+                ? _context.StudentExams.Max(se => se.StudentExamID)
+                : 0;
+
+            entity.StudentExamID = maxId + 1;
+
             _context.StudentExams.Add(entity);
         }
+
 
         public void Delete(int id)
         {
@@ -45,7 +52,7 @@ namespace School_Management_System.Repositories.Implementations
 
         public StudentExam GetStudentExamById(int id)
         {
-            return GetById(id); 
+            return GetById(id);
         }
 
         public void Update(StudentExam entity)

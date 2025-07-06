@@ -1,0 +1,60 @@
+﻿@model School_Management_System.ViewModel.TeacherViewModel
+
+@{
+    ViewData["Title"] = "Edit Teacher";
+}
+
+<h2 class="mb-4">✏️ Edit Teacher</h2>
+
+<div class="card shadow p-4">
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label fw-bold"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="HireDate" class="form-label fw-bold"></label>
+            <input asp-for="HireDate" type="date" class="form-control" />
+            <span asp-validation-for="HireDate" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Phone" class="form-label fw-bold"></label>
+            <input asp-for="Phone" class="form-control" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label fw-bold"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Role" class="form-label fw-bold"></label>
+            <input asp-for="Role" class="form-control" />
+            <span asp-validation-for="Role" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="DepartmentId" class="form-label fw-bold">Department</label>
+            <select asp-for="DepartmentId" asp-items="Model.Departments" class="form-select">
+                <option value="">-- Select Department --</option>
+            </select>
+            <span asp-validation-for="DepartmentId" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex justify-content-end mt-4">
+            <button type="submit" class="btn btn-primary me-2">💾 Save Changes</button>
+            <a asp-action="Index" class="btn btn-secondary">↩️ Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

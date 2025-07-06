@@ -20,7 +20,7 @@ namespace School_Management_System.Repositories.Implementations
 
         public IEnumerable<Department> GetAll()
         {
-            return db.Departments.Include(d => d.Teachers).ToList();
+            return db.Departments.Include(d => d.Teachers).Include(d => d.Courses).ToList();
         }
 
         public Department GetById(int id)
@@ -52,7 +52,7 @@ namespace School_Management_System.Repositories.Implementations
 
         public void SaveChanges()
         {
-            throw new NotImplementedException();
+            db.SaveChanges();
         }
 
         public void ReseedTable(string tableName, int seedValue = 0)

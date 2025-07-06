@@ -26,7 +26,7 @@ namespace School_Management_System.Repositories.Implementations
             return _context.Exams
                 .Include(e => e.Course)
                 .Include(e => e.Questions)
-                .FirstOrDefault(e => e.ExamID == id);
+                .FirstOrDefault(e => e.ExamID == id) ?? throw new KeyNotFoundException($"Exam with ID {id} not found.");
         }
 
         public void Add(Exam entity)

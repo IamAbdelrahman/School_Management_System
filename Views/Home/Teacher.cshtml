@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Teacher Dashboard";
+}
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="text-info">Welcome to Your Teacher Dashboard</h1>
+        <p class="lead">Track and manage your courses and exams</p>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card border-start border-info border-5 shadow">
+                <div class="card-body">
+                    <h5 class="card-title">My Courses</h5>
+                    <p class="card-text">See the list of courses you teach.</p>
+                    <a asp-controller="Courses" asp-action="MyCourses" class="btn btn-info w-100">View Courses</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-start border-warning border-5 shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Exams & Questions</h5>
+                    <p class="card-text">Create exams and manage questions.</p>
+                    <a asp-controller="Exams" asp-action="Index" class="btn btn-warning w-100">Manage Exams</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,56 +1,46 @@
-﻿@using School_Management_System.ViewModel
+﻿@model School_Management_System.ViewModel.TeacherViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Teacher Details";
 }
 
-@model TeacherViewModel
+<h2 class="mb-4">👨‍🏫 Teacher Details</h2>
 
-<h2 class="mb-4"> Teacher Details</h2>
-<table class="table table-striped table-bordered shadow">
-    <thead class="table-dark text-center">
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Hire Date</th>
-            <th>Role</th>
-            <th>Department</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr>
-            <td>@Model.Id</td>
-            <td>@Model.Name</td>
-            <td>@Model.Email</td>
-            <td>@Model.Phone</td>
-            <td>@Model.HireDate</td>
-            <td>@Model.Role</td>
-            <td>@Model.DepartmentName</td>
-            </tr>
-            </tbody>
-        </table>
+<div class="card shadow p-4 mb-4">
+    <h4>@Model.Name</h4>
+    <p><strong>📅 Hire Date:</strong> @Model.HireDate?.ToString("yyyy-MM-dd")</p>
+    <p><strong>📞 Phone:</strong> @Model.Phone</p>
+    <p><strong>📧 Email:</strong> @Model.Email</p>
+    <p><strong>🧑‍💼 Role:</strong> @Model.Role</p>
+    <p><strong>🏛️ Department:</strong> @Model.DepartmentName</p>
+    <p><strong>📘 Total Courses:</strong> @Model.CourseCount</p>
+    <p><strong>🏫 Total Classes:</strong> @Model.ClassCount</p>
+</div>
 
-<a asp-action="Index" class="btn btn-secondary">Back</a>
+@if (Model.CourseCount > 0)
+{
+    <div class="mb-4">
+        <h5 class="text-primary">📘 Courses Assigned</h5>
+        <ul class="list-group">
+            @foreach (var course in ViewBag.Courses as List<string>)
+            {
+                <li class="list-group-item">@course</li>
+            }
+        </ul>
+    </div>
+}
 
-@* <!-- Views/Teachers/Create.cshtml -->
-@model TeacherViewModel
-<h2>Add Teacher</h2>
-<form asp-action="Create">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    @Html.EditorForModel()
-    <button type="submit" class="btn btn-success">Create</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+@if (Model.ClassCount > 0)
+{
+    <div class="mb-4">
+        <h5 class="text-success">🏫 Classes Assigned</h5>
+        <ul class="list-group">
+            @foreach (var cls in ViewBag.Classes as List<string>)
+            {
+                <li class="list-group-item">@cls</li>
+            }
+        </ul>
+    </div>
+}
 
-<!-- Views/Teachers/Edit.cshtml -->
-@model TeacherViewModel
-<h2>Edit Teacher</h2>
-<form asp-action="Edit">
-    <input type="hidden" asp-for="Id" />
-    <div asp-validation-summary="All" class="text-danger"></div>
-    @Html.EditorForModel()
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form> *@
+<a asp-action="Index" class="btn btn-secondary">⬅️ Back to List</a>

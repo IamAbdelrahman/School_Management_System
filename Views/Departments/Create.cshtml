@@ -1,0 +1,41 @@
+﻿@model School_Management_System.ViewModel.DepartmentViewModel
+@{
+    ViewData["Title"] = "➕ Create Department";
+}
+
+<h2 class="mb-4">➕ Create Department</h2>
+
+<div class="card shadow p-4">
+    <form asp-action="Create" method="post">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label fw-bold"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Courses</label>
+            <select asp-for="SelectedCourseIDs"
+                    asp-items="@(new MultiSelectList(Model.AllCourses, "CourseID", "Name", Model.SelectedCourseIDs))"
+                    class="form-select" multiple>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Teachers</label>
+            <select asp-for="SelectedTeacherIDs"
+                    asp-items="@(new MultiSelectList(Model.AllTeachers, "TeacherID", "Name", Model.SelectedTeacherIDs))"
+                    class="form-select" multiple>
+            </select>
+        </div>
+
+        <div class="d-flex justify-content-end mt-4">
+            <button type="submit" class="btn btn-success me-2">Create</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@* @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} *@

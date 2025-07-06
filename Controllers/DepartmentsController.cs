@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using School_Management_System.Models;
 using School_Management_System.Repositories.Implementations;
 using School_Management_System.Repositories.Interfaces;
@@ -7,16 +8,19 @@ using School_Management_System.ViewModel;
 
 namespace School_Management_System.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class DepartmentsController : Controller
     {
         private readonly IDepartmentRepository departmentRepo;
         private readonly ICourseRepository courseRepo;
+        private readonly ITeacherRepository teacherRepo;
 
-        public DepartmentsController(IDepartmentRepository departmentRepo, ICourseRepository courseRepo)
+        public DepartmentsController(IDepartmentRepository departmentRepo, ICourseRepository courseRepo,
+            ITeacherRepository teacherRepo)
         {
             this.departmentRepo = departmentRepo;
             this.courseRepo = courseRepo;
+            this.teacherRepo=teacherRepo;
         }
 
         public IActionResult Index()
@@ -45,51 +49,142 @@ namespace School_Management_System.Controllers
                 Courses = string.Join("- ", department.Courses.Select(c => c.Name)),
                 Teachers = string.Join("- ", department.Teachers.Select(c => c.Name))
             };
-            return View(departmentVM);  
+            return View(departmentVM);
         }
-        public IActionResult Create() => View();
+        [HttpGet]
+        public IActionResult Create()
+        {
+            var viewModel = new DepartmentViewModel
+            {
+                AllCourses = courseRepo.GetAll(),
+                AllTeachers = teacherRepo.GetAll()
+            };
+            return View(viewModel);
+        }
+
         [HttpPost]
-        public IActionResult Save_Dept(Department dept)
-        { 
-            if (ModelState.IsValid)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(DepartmentViewModel model)
+        {
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    departmentRepo.Add(dept);
-                    departmentRepo.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", "An error occurred while saving the department: " + ex.Message);
-                    return View("New", dept);
-                }
+                model.AllCourses = courseRepo.GetAll();
+                model.AllTeachers = teacherRepo.GetAll();
+                return View(model);
             }
-            else
+            var maxId = departmentRepo.GetAll().Any()
+                ? departmentRepo.GetAll().Max(c => c.DepartmentID)
+                : 0;
+            var dept = new Department
             {
-                return View("New", dept);
-            }
+                DepartmentID = maxId + 1,
+                Name = model.Name,
+                Courses = courseRepo.GetAll().Where(c => model.SelectedCourseIDs.Contains(c.CourseID)).ToList(),
+                Teachers = teacherRepo.GetAll().Where(t => model.SelectedTeacherIDs.Contains(t.TeacherID)).ToList()
+            };
+
+            departmentRepo.Add(dept);
+            departmentRepo.SaveChanges();
+            return RedirectToAction("Index");
         }
+        [HttpGet]
         public IActionResult Edit(int id)
         {
             var dept = departmentRepo.GetById(id);
-            if (dept == null) return NotFound();
-            return View(dept);
+
+            if (dept == null)
+                return NotFound();
+
+            var viewModel = new DepartmentViewModel
+            {
+                DepartmentID = dept.DepartmentID,
+                Name = dept.Name,
+                AllCourses = courseRepo.GetAll(),
+                AllTeachers = teacherRepo.GetAll(),
+                SelectedCourseIDs = dept.Courses.Select(c => c.CourseID).ToList(),
+                SelectedTeacherIDs = dept.Teachers.Select(t => t.TeacherID).ToList()
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult Update_Dept(Department dept)
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(DepartmentViewModel model)
         {
-            if (!ModelState.IsValid) return View(dept);
+            if (!ModelState.IsValid)
+            {
+                model.AllCourses = courseRepo.GetAll();
+                model.AllTeachers = teacherRepo.GetAll();
+                return View(model);
+            }
+
+            var dept = departmentRepo.GetById(model.DepartmentID);
+
+            if (dept == null)
+                return NotFound();
+
+            dept.Name = model.Name;
+
+            // Update Courses
+            dept.Courses.Clear();
+            var selectedCourses = courseRepo.GetAll().Where(c => model.SelectedCourseIDs.Contains(c.CourseID)).ToList();
+            foreach (var course in selectedCourses)
+            {
+                dept.Courses.Add(course);
+            }
+
+            // Update Teachers
+            dept.Teachers.Clear();
+            var selectedTeachers = teacherRepo.GetAll().Where(t => model.SelectedTeacherIDs.Contains(t.TeacherID)).ToList();
+            foreach (var teacher in selectedTeachers)
+            {
+                dept.Teachers.Add(teacher);
+            }
+
             departmentRepo.Update(dept);
-            return RedirectToAction("Index");
+            departmentRepo.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
+
 
         public IActionResult Delete(int id)
         {
-            departmentRepo.Delete(id);
-            return RedirectToAction("Index");
+            var dept = departmentRepo.GetById(id);
+
+            if (dept == null)
+                return NotFound();
+
+            var viewModel = new DepartmentViewModel
+            {
+                DepartmentID = dept.DepartmentID,
+                Name = dept.Name,
+                Courses = string.Join(", ", dept.Courses.Select(c => c.Name)),
+                Teachers = string.Join(", ", dept.Teachers.Select(t => t.Name))
+            };
+
+            return View(viewModel);
         }
 
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var dept = departmentRepo.GetById(id);
+
+            if (dept == null)
+                return NotFound();
+
+            if (dept.Courses.Any() || dept.Teachers.Any())
+            {
+                TempData["Error"] = "Cannot delete department because it has assigned teachers or courses.";
+                return RedirectToAction(nameof(Delete), new { id });
+            }
+
+            departmentRepo.Delete(id);
+            departmentRepo.SaveChanges();
+            TempData["Success"] = "Department deleted successfully.";
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

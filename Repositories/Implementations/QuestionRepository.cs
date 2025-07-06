@@ -22,7 +22,8 @@ namespace School_Management_System.Repositories
 
         public Question GetById(int id)
         {
-            return _context.Questions.Include(q => q.Exam).FirstOrDefault(q => q.QuestionID == id);
+            return _context.Questions.Include(q => q.Exam).FirstOrDefault(q => q.QuestionID == id)
+                ?? throw new KeyNotFoundException($"Question with ID {id} not found.");
         }
 
         public void Add(Question entity)
