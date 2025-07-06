@@ -8,18 +8,11 @@ namespace School_Management_System.ViewModel
     {
         public int DepartmentID { get; set; }
 
-        [Required(ErrorMessage = "Department name is required")]
-        [StringLength(30, MinimumLength = 5, ErrorMessage = "Department name must be at least 5 characters")]
-        [RegularExpression(@"^[A-Za-z\- ]+$", ErrorMessage = "Department name can contain only letters, hyphens (-), and spaces")]
+        [Required]
+        [StringLength(100)]
         public string Name { get; set; }
 
-        public string Courses { get; set; }
-        public string? Teachers { get; set; }
-
-        public List<int> SelectedCourseIDs { get; set; } 
-        public List<int> SelectedTeacherIDs { get; set; } 
-
-        public IEnumerable<Course> AllCourses { get; set; }
-        public IEnumerable<Teacher> AllTeachers { get; set; }
+        public int TeacherCount { get; set; }
+        public int CourseCount { get; set; }
     }
 }

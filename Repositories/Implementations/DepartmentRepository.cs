@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using School_Management_System.Models;
 using School_Management_System.Repositories.Interfaces;
+using School_Management_System.ViewModel;
 using System;
 
 namespace School_Management_System.Repositories.Implementations
@@ -22,7 +23,18 @@ namespace School_Management_System.Repositories.Implementations
         {
             return db.Departments.Include(d => d.Teachers).Include(d => d.Courses).ToList();
         }
-
+        public IEnumerable<DepartmentViewModel> GetAllDepartments()
+        {
+            return db.Departments.Include(d => d.Teachers).Include(d => d.Courses)
+                .Select(d => new DepartmentViewModel
+                {
+                    DepartmentID = d.DepartmentID,
+                    Name = d.Name,
+                    TeacherCount = d.Teachers.Count,
+                    CourseCount = d.Courses.Count
+                })
+                .ToList();
+        }
         public Department GetById(int id)
         {
             return db.Departments.Include(d => d.Teachers)
