@@ -19,7 +19,18 @@ namespace School_Management_System.Repositories.Implementations
         {
             db.Courses.Add(entity);
         }
-
+        public void CreateCourse(CourseViewModel courseViewModel)
+        {
+            if (courseViewModel == null) throw new ArgumentNullException(nameof(courseViewModel), "CourseViewModel cannot be null.");
+            var course = new Course
+            {
+                Name = courseViewModel.Title,
+                Description = courseViewModel.Description,
+                DepartmentID = courseViewModel.DepartmentId,
+                TeacherID = courseViewModel.TeacherId
+            };
+            db.Courses.Add(course);
+        }
         void IRepository<Course>.Delete(int id)
         {
             if (id <= 0) throw new ArgumentException("Invalid course ID.", nameof(id));

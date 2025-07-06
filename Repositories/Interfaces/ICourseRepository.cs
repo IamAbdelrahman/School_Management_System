@@ -12,6 +12,7 @@ namespace School_Management_System.Repositories.Interfaces
         public IEnumerable<Course> GetCoursesByDepartmentId(int departmentId);
         public IEnumerable<CourseViewModel> GetAllCoursesViewModel();
         public CourseViewModel GetCourseByIdViewModel(int id);
+        public void CreateCourse(CourseViewModel courseViewModel);
         public void UpdateCourseViewModel(CourseViewModel courseViewModel);
         public bool CourseExists(int id);
         public IEnumerable<Department> GetDepartments();
