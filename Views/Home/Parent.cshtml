@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Parent Dashboard";
 }
+
 <div class="container mt-5">
     <div class="text-center mb-4">
         <h1 class="text-success">Welcome to Your Student Dashboard</h1>
@@ -12,7 +13,7 @@
                 <div class="card-body">
                     <h5 class="card-title">My Courses</h5>
                     <p class="card-text">Browse your active course enrollments.</p>
-                    <a asp-controller="Courses" asp-action="MyEnrollments" class="btn btn-success w-100">View Courses</a>
+                    <a asp-controller="Courses" asp-action="Index" class="btn btn-success w-100">View Courses</a>
                 </div>
             </div>
         </div>
@@ -21,7 +22,10 @@
                 <div class="card-body">
                     <h5 class="card-title">Exam Results</h5>
                     <p class="card-text">Check your grades and performance.</p>
-                    <a asp-controller="Exams" asp-action="MyResults" class="btn btn-secondary w-100">View Results</a>
+                    @{
+                        var id = Context.Session.GetInt32("Code");
+                    }
+                    <a asp-controller="Exams" asp-action="Details" asp-route-id="@(id)" class="btn btn-secondary w-100">View Results</a>
                 </div>
             </div>
         </div>

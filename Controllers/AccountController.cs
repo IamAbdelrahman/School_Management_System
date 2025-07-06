@@ -100,7 +100,9 @@ namespace School_Management_System.Controllers
                 {
                     await roleManager.CreateAsync(new IdentityRole(selectedRole));
                 }
-
+                // Store the user's ID in session storage
+                HttpContext.Session.SetInt32("Code", model.ID);
+                
                 // Assign role
                 await userManager.AddToRoleAsync(user, selectedRole);
 
