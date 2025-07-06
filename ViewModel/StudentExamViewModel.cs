@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using School_Management_System.Models;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace School_Management_System.ViewModel
@@ -8,32 +8,30 @@ namespace School_Management_System.ViewModel
     {
         public int StudentExamID { get; set; }
 
-        [Required(ErrorMessage = "Student is required.")]
+        [Required(ErrorMessage = "Student is required")]
         public int? StudentID { get; set; }
 
-        [Required(ErrorMessage = "Exam is required.")]
+        [Required(ErrorMessage = "Exam is required")]
         public int? ExamID { get; set; }
 
-        [Required(ErrorMessage = "Grade is required.")]
-        [Display(Name = "Student Grade")]
+        [Range(0, int.MaxValue, ErrorMessage = "Student grade must be a non-negative number")]
         public double? StudentGrade { get; set; }
+
+        public double? ExamGrade { get; set; }
 
         public List<SelectListItem> Students { get; set; } = new();
         public List<SelectListItem> Exams { get; set; } = new();
-
-        // For validation context
-        public double? MaxExamGrade { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (StudentGrade < 0)
             {
-                yield return new ValidationResult("Student grade cannot be negative.", new[] { nameof(StudentGrade) });
+                yield return new ValidationResult("Student grade cannot be negative", new[] { nameof(StudentGrade) });
             }
 
-            if (MaxExamGrade.HasValue && StudentGrade > MaxExamGrade.Value)
+            if (ExamGrade.HasValue && StudentGrade.HasValue && StudentGrade > ExamGrade)
             {
-                yield return new ValidationResult($"Student grade cannot exceed the exam grade ({MaxExamGrade}).", new[] { nameof(StudentGrade) });
+                yield return new ValidationResult($"Grade cannot exceed Exam grade ({ExamGrade})", new[] { nameof(StudentGrade) });
             }
         }
     }

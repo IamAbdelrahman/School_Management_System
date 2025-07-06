@@ -13,8 +13,11 @@ namespace School_Management_System.Controllers
         private readonly IStudentRepository _studentRepo;
         private readonly ITIContext _context;
 
-        public StudentExamController(IStudentExamRepository studentExamRepo, IExamRepository examRepo,
-            IStudentRepository studentRepo, ITIContext context)
+        public StudentExamController(
+            IStudentExamRepository studentExamRepo,
+            IExamRepository examRepo,
+            IStudentRepository studentRepo,
+            ITIContext context)
         {
             _studentExamRepo = studentExamRepo;
             _examRepo = examRepo;
@@ -59,57 +62,35 @@ namespace School_Management_System.Controllers
 
             return View(studentExam);
         }
+
         public IActionResult Create()
         {
-            var studentExamViewModel = new StudentExamViewModel
+            var vm = new StudentExamViewModel
             {
-                Students = _context.Students.Select(s => new SelectListItem
-                {
-                    Value = s.StudentID.ToString(),
-                    Text = s.Name
-                }).ToList(),
-
-                Exams = _context.Exams.Select(e => new SelectListItem
-                {
-                    Value = e.ExamID.ToString(),
-                    Text = $"{e.Type} (Grade: {e.Grade})"
-                }).ToList()
+                Students = GetStudentSelectList(),
+                Exams = GetExamSelectList()
             };
-
-            return View(studentExamViewModel);
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(StudentExamViewModel studentExamViewModel)
+        public IActionResult Create(StudentExamViewModel vm)
         {
-            var exam = _examRepo.GetById(studentExamViewModel.ExamID ?? 0);
-            studentExamViewModel.MaxExamGrade = exam?.Grade;
+            var exam = _examRepo.GetById(vm.ExamID ?? 0);
+            vm.ExamGrade = exam?.Grade;
 
-            studentExamViewModel.Students = _studentRepo.GetAll()
-                .Select(s => new SelectListItem
-                {
-                    Value = s.StudentID.ToString(),
-                    Text = s.Name
-                }).ToList();
-
-            studentExamViewModel.Exams = _examRepo.GetAll()
-                .Select(e => new SelectListItem
-                {
-                    Value = e.ExamID.ToString(),
-                    Text = $"{e.Type} - Grade: {e.Grade}"
-                }).ToList();
+            vm.Students = GetStudentSelectList();
+            vm.Exams = GetExamSelectList();
 
             if (!ModelState.IsValid)
-            {
-                return View(studentExamViewModel);
-            }
+                return View(vm);
 
             var studentExam = new StudentExam
             {
-                StudentID = studentExamViewModel.StudentID,
-                ExamID = studentExamViewModel.ExamID,
-                StudentGrade = studentExamViewModel.StudentGrade
+                StudentID = vm.StudentID,
+                ExamID = vm.ExamID,
+                StudentGrade = vm.StudentGrade
             };
 
             _studentExamRepo.Add(studentExam);
@@ -124,59 +105,40 @@ namespace School_Management_System.Controllers
             if (studentExam == null)
                 return NotFound();
 
-            var viewModel = new StudentExamViewModel
+            var vm = new StudentExamViewModel
             {
                 StudentExamID = studentExam.StudentExamID,
                 StudentID = studentExam.StudentID,
                 ExamID = studentExam.ExamID,
                 StudentGrade = studentExam.StudentGrade,
-                MaxExamGrade = studentExam.Exam?.Grade,
-
-                Students = _context.Students.Select(s => new SelectListItem
-                {
-                    Value = s.StudentID.ToString(),
-                    Text = s.Name
-                }).ToList(),
-
-                Exams = _context.Exams.Select(e => new SelectListItem
-                {
-                    Value = e.ExamID.ToString(),
-                    Text = $"{e.Type} (Grade: {e.Grade})"
-                }).ToList()
+                ExamGrade = studentExam.Exam?.Grade,
+                Students = GetStudentSelectList(),
+                Exams = GetExamSelectList()
             };
 
-            return View(viewModel);
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(StudentExamViewModel viewModel)
+        public IActionResult Edit(StudentExamViewModel vm)
         {
-            var exam = _context.Exams.FirstOrDefault(e => e.ExamID == viewModel.ExamID);
-            viewModel.MaxExamGrade = exam?.Grade;
+            var exam = _examRepo.GetById(vm.ExamID ?? 0);
+            vm.ExamGrade = (int?)exam?.Grade;
 
-            viewModel.Students = _context.Students.Select(s => new SelectListItem
-            {
-                Value = s.StudentID.ToString(),
-                Text = s.Name
-            }).ToList();
-
-            viewModel.Exams = _context.Exams.Select(e => new SelectListItem
-            {
-                Value = e.ExamID.ToString(),
-                Text = $"{e.Type} (Grade: {e.Grade})"
-            }).ToList();
+            vm.Students = GetStudentSelectList();
+            vm.Exams = GetExamSelectList();
 
             if (!ModelState.IsValid)
-                return View(viewModel);
+                return View(vm);
 
-            var studentExam = _studentExamRepo.GetById(viewModel.StudentExamID);
+            var studentExam = _studentExamRepo.GetById(vm.StudentExamID);
             if (studentExam == null)
                 return NotFound();
 
-            studentExam.StudentID = viewModel.StudentID;
-            studentExam.ExamID = viewModel.ExamID;
-            studentExam.StudentGrade = viewModel.StudentGrade;
+            studentExam.StudentID = vm.StudentID;
+            studentExam.ExamID = vm.ExamID;
+            studentExam.StudentGrade = vm.StudentGrade;
 
             _studentExamRepo.Update(studentExam);
             _studentExamRepo.SaveChanges();
@@ -184,20 +146,15 @@ namespace School_Management_System.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
         public IActionResult Delete(int id)
         {
             var studentExam = _studentExamRepo.GetStudentExamById(id);
             if (studentExam == null)
                 return NotFound();
 
-            bool hasReferences = false; 
-
-            ViewBag.CanDelete = !hasReferences;
-
+            ViewBag.CanDelete = true; // Add FK check if needed
             return View(studentExam);
         }
-
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -205,8 +162,25 @@ namespace School_Management_System.Controllers
         {
             _studentExamRepo.Delete(id);
             _studentExamRepo.SaveChanges();
-
             return RedirectToAction(nameof(Index));
+        }
+
+        private List<SelectListItem> GetStudentSelectList()
+        {
+            return _studentRepo.GetAll().Select(s => new SelectListItem
+            {
+                Value = s.StudentID.ToString(),
+                Text = s.Name
+            }).ToList();
+        }
+
+        private List<SelectListItem> GetExamSelectList()
+        {
+            return _examRepo.GetAll().Select(e => new SelectListItem
+            {
+                Value = e.ExamID.ToString(),
+                Text = $"{e.Type} (Grade: {e.Grade})"
+            }).ToList();
         }
     }
 }
