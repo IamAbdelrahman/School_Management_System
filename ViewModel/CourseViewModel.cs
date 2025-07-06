@@ -24,10 +24,10 @@ namespace School_Management_System.ViewModel
         public string Description { get; set; }
 
         [Display(Name = "Department")]
-        public int DepartmentId { get; set; }
+        public int? DepartmentId { get; set; }
 
         [Display(Name = "Teacher")]
-        public int TeacherId { get; set; }
+        public int? TeacherId { get; set; }
 
         // Navigation properties for display
         public string DepartmentName { get; set; }
