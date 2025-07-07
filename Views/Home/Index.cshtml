@@ -1,194 +1,230 @@
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Home Page";
+    Layout = "_Layout";
 }
-
-<style>
-    .hover-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-        .hover-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            z-index: 2;
-        }
-
-    .carousel-caption {
-        bottom: 20%;
-    }
-
-        .carousel-caption h1 {
-            font-size: 3rem;
-            font-weight: bold;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
-        }
-
-        .carousel-caption a.btn {
-            font-size: 1.2rem;
-            padding: 12px 24px;
-            font-weight: 600;
-        }
-</style>
-
-<!-- 🎞️ Slider -->
-<div id="carouselExampleIndicators" class="carousel slide mb-5" data-bs-ride="carousel">
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img src="https://images.pexels.com/photos/17639079/pexels-photo-17639079.jpeg" class="d-block w-100" alt="Students">
-            <div class="carousel-caption d-none d-md-block">
-                <h1 class="display-4 fw-bold">Explore Our Students</h1>
-                <a href="/Students" class="btn btn-warning btn-lg mt-2">View Students</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Gate Primary School</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="~/css/home.css" rel="stylesheet"/>
+</head>
+<body>
+    <!-- 🎞️ Enhanced Slider -->
+    <div id="carouselExampleIndicators" class="carousel slide mb-5" data-bs-ride="carousel" data-bs-interval="6000">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://images.pexels.com/photos/17639079/pexels-photo-17639079.jpeg" class="d-block w-100" alt="Happy Students Learning">
+                <div class="carousel-caption d-none d-md-block">
+                    <h1 class="display-4 fw-bold">Explore Our Students</h1>
+                    <p class="mb-4">Discover the bright minds shaping tomorrow's world</p>
+                    <a href="/Students" class="btn btn-warning btn-lg mt-2">View Students</a>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="https://images.pexels.com/photos/5212348/pexels-photo-5212348.jpeg" class="d-block w-100" alt="Dedicated Teachers">
+                <div class="carousel-caption d-none d-md-block">
+                    <h1 class="display-4 fw-bold">Meet Our Teachers</h1>
+                    <p class="lead mb-4">Experienced educators dedicated to student success</p>
+                    <a href="/Teachers" class="btn btn-lg mt-2">View Teachers</a>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="https://images.pexels.com/photos/301920/pexels-photo-301920.jpeg" class="d-block w-100" alt="Interactive Learning">
+                <div class="carousel-caption d-none d-md-block">
+                    <h1 class="display-4 fw-bold">Our Courses</h1>
+                    <p class="lead mb-4">Engaging curriculum designed for young minds</p>
+                    <a href="/Courses" class="btn btn-lg mt-2">View Courses</a>
+                </div>
             </div>
         </div>
-        <div class="carousel-item">
-            <img src="https://images.pexels.com/photos/5212348/pexels-photo-5212348.jpeg" class="d-block w-100" alt="Teachers">
-            <div class="carousel-caption d-none d-md-block">
-                <h1 class="display-4 fw-bold">Meet Our Teachers</h1>
-                <a href="/Teachers" class="btn btn-warning btn-lg mt-2">View Teachers</a>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img src="https://images.pexels.com/photos/301920/pexels-photo-301920.jpeg" class="d-block w-100" alt="Courses">
-            <div class="carousel-caption d-none d-md-block">
-                <h1 class="display-4 fw-bold">Our Courses</h1>
-                <a href="/Courses" class="btn btn-warning btn-lg mt-2">View Courses</a>
-            </div>
-        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
-</div>
 
-<!-- 🛠️ Our Services -->
-<section class="py-5 bg-light text-center">
-    <div class="container">
-        <h2 class="fw-bold mb-4">Our Services</h2>
-        <div class="row g-4">
-            <div class="col-md-3">
-                <div class="card h-100 shadow-sm border-0 hover-card">
-                    <div class="card-body">
-                        <i class="bi bi-people-fill fs-1 text-primary mb-3"></i>
-                        <h5 class="card-title">Student Management</h5>
-                        <p class="card-text">Monitor academic progress and attendance records.</p>
+    <!-- 🛠️ Our Services -->
+    <section class="py-5 bg-light text-center">
+        <div class="container">
+            <h2 class="fw-bold mb-4 display-5">Our Services</h2>
+            <p class="lead mb-5 text-muted">Comprehensive solutions for modern education</p>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="card h-100 shadow-sm border-0 hover-card glow-effect">
+                        <div class="card-body">
+                            <i class="bi bi-people-fill fs-1 text-primary mb-3 float-animation"></i>
+                            <h5 class="card-title fw-bold">Student Management</h5>
+                            <p class="card-text">Monitor academic progress and attendance records with advanced analytics.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card h-100 shadow-sm border-0 hover-card">
-                    <div class="card-body">
-                        <i class="bi bi-person-workspace fs-1 text-success mb-3"></i>
-                        <h5 class="card-title">Teacher Tools</h5>
-                        <p class="card-text">Manage classes, grades, and student interactions easily.</p>
+                <div class="col-md-3">
+                    <div class="card h-100 shadow-sm border-0 hover-card glow-effect">
+                        <div class="card-body">
+                            <i class="bi bi-person-workspace fs-1 text-success mb-3 float-animation" style="animation-delay: 0.5s"></i>
+                            <h5 class="card-title fw-bold">Teacher Tools</h5>
+                            <p class="card-text">Manage classes, grades, and student interactions with intuitive interfaces.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card h-100 shadow-sm border-0 hover-card">
-                    <div class="card-body">
-                        <i class="bi bi-book-fill fs-1 text-warning mb-3"></i>
-                        <h5 class="card-title">Course Planning</h5>
-                        <p class="card-text">Build and assign engaging courses and content.</p>
+                <div class="col-md-3">
+                    <div class="card h-100 shadow-sm border-0 hover-card glow-effect">
+                        <div class="card-body">
+                            <i class="bi bi-book-fill fs-1 text-warning mb-3 float-animation" style="animation-delay: 1s"></i>
+                            <h5 class="card-title fw-bold">Course Planning</h5>
+                            <p class="card-text">Build and assign engaging courses with interactive content.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card h-100 shadow-sm border-0 hover-card">
-                    <div class="card-body">
-                        <i class="bi bi-bar-chart-fill fs-1 text-danger mb-3"></i>
-                        <h5 class="card-title">Reporting & Analysis</h5>
-                        <p class="card-text">Visualize student performance and generate reports.</p>
+                <div class="col-md-3">
+                    <div class="card h-100 shadow-sm border-0 hover-card glow-effect">
+                        <div class="card-body">
+                            <i class="bi bi-bar-chart-fill fs-1 text-danger mb-3 float-animation" style="animation-delay: 1.5s"></i>
+                            <h5 class="card-title fw-bold">Reporting & Analysis</h5>
+                            <p class="card-text">Visualize student performance with comprehensive reporting tools.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- 🌟 Why Choose Us -->
-<section class="py-5 text-center">
-    <div class="container">
-        <h2 class="fw-bold mb-4">Why Choose Us?</h2>
-        <div class="row g-4">
-            <div class="col-md-3">
-                <div class="p-4 bg-light rounded shadow-sm h-100 hover-card">
-                    <i class="bi bi-laptop fs-1 text-primary mb-3"></i>
-                    <h5>Smart Learning</h5>
-                    <p class="text-muted">Interactive digital classes for modern education.</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="p-4 bg-light rounded shadow-sm h-100 hover-card">
-                    <i class="bi bi-award-fill fs-1 text-success mb-3"></i>
-                    <h5>Certified Teachers</h5>
-                    <p class="text-muted">Our teachers are experienced and highly qualified.</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="p-4 bg-light rounded shadow-sm h-100 hover-card">
-                    <i class="bi bi-building fs-1 text-warning mb-3"></i>
-                    <h5>Modern Facilities</h5>
-                    <p class="text-muted">State-of-the-art labs, libraries, and classrooms.</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="p-4 bg-light rounded shadow-sm h-100 hover-card">
-                    <i class="bi bi-graph-up fs-1 text-danger mb-3"></i>
-                    <h5>Progress Tracking</h5>
-                    <p class="text-muted">Keep track of academic and behavioral progress.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- 💼 Plan Upgrades -->
-<section class="py-5 bg-light text-center">
-    <div class="container">
-        <h2 class="fw-bold mb-5">Plan Upgrades</h2>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0 hover-card">
-                    <div class="card-body">
-                        <h3 class="fw-bold text-primary">Basic</h3>
-                        <p class="text-muted">Free</p>
-                        <p>Access to student & teacher management.</p>
+    <!-- 💼 Plan Upgrades -->
+    <section class="py-5 bg-light text-center">
+        <div class="container">
+            <h2 class="fw-bold mb-5 display-5">Choose Your Plan</h2>
+            <p class="lead mb-5 text-muted">Flexible options to meet your educational needs</p>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0 pricing-card">
+                        <div class="card-body p-4">
+                            <i class="bi bi-star fs-1 text-primary mb-3"></i>
+                            <h3 class="fw-bold text-primary">Basic</h3>
+                            <p class="text-muted fs-4">Free</p>
+                            <hr>
+                            <p>✓ Student & Teacher Management</p>
+                            <p>✓ Basic Reporting</p>
+                            <p>✓ Community Support</p>
+                            <button class="btn btn-outline-primary btn-lg">Get Started</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0 hover-card">
-                    <div class="card-body">
-                        <h3 class="fw-bold text-success">Pro</h3>
-                        <p class="text-muted">$49/month</p>
-                        <p>Includes exams, reports, and analysis tools.</p>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0 pricing-card">
+                        <div class="card-body p-4">
+                            <i class="bi bi-star-fill fs-1 text-success mb-3"></i>
+                            <h3 class="fw-bold text-success">Pro</h3>
+                            <p class="text-muted fs-4">$49/month</p>
+                            <hr>
+                            <p>✓ Everything in Basic</p>
+                            <p>✓ Advanced Analytics</p>
+                            <p>✓ Exam Management</p>
+                            <p>✓ Priority Support</p>
+                            <button class="btn btn-success btn-lg">Choose Pro</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0 hover-card">
-                    <div class="card-body">
-                        <h3 class="fw-bold text-warning">Enterprise</h3>
-                        <p class="text-muted">Custom</p>
-                        <p>All features + premium support for schools.</p>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0 pricing-card">
+                        <div class="card-body p-4">
+                            <i class="bi bi-gem fs-1 text-warning mb-3"></i>
+                            <h3 class="fw-bold text-warning">Enterprise</h3>
+                            <p class="text-muted fs-4">Custom</p>
+                            <hr>
+                            <p>✓ Everything in Pro</p>
+                            <p>✓ Custom Features</p>
+                            <p>✓ Dedicated Support</p>
+                            <p>✓ Training & Onboarding</p>
+                            <button class="btn btn-warning btn-lg">Contact Sales</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- ℹ️ About Us -->
-<section class="py-5 text-center">
-    <div class="container">
-        <h2 class="fw-bold mb-3">About Future Gate</h2>
-        <p class="text-muted mx-auto" style="max-width: 700px;">
-            At Future Gate School, we aim to deliver top-quality education through modern technology, experienced staff, and a passion for student development. We are your partner in building a better future.
-        </p>
-    </div>
-</section>
+    <!-- ℹ️ About Us -->
+    <section class="py-5 text-center bg-gradient-secondary">
+        <div class="container">
+            <h2 class="fw-bold mb-4 display-5">About Future Gate</h2>
+            <p class="lead mx-auto mb-4" style="max-width: 800px;">
+                At Future Gate Primary School, we believe in nurturing young minds through innovative technology,
+                experienced educators, and a commitment to excellence. We're not just a school – we're your partner
+                in building a brighter future for every child.
+            </p>
+            <div class="row mt-5">
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="bi bi-heart-fill fs-1 text-white mb-3"></i>
+                        <h5 class="fw-bold">Passionate Teaching</h5>
+                        <p>Every educator is dedicated to inspiring and nurturing young minds.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="bi bi-lightbulb-fill fs-1 text-white mb-3"></i>
+                        <h5 class="fw-bold">Innovation First</h5>
+                        <p>We embrace technology to enhance learning experiences.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="bi bi-people-fill fs-1 text-white mb-3"></i>
+                        <h5 class="fw-bold">Community Focused</h5>
+                        <p>Building strong relationships with families and the community.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Enhanced carousel with smooth transitions
+        document.addEventListener('DOMContentLoaded', function() {
+            const carousel = document.getElementById('carouselExampleIndicators');
+            const carouselInstance = new bootstrap.Carousel(carousel, {
+                interval: 8000,
+                wrap: true,
+                touch: true
+            });
+
+            // Add intersection observer for scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'slideUpFade 0.8s ease-out';
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.hover-card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

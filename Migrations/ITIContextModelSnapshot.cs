@@ -543,14 +543,14 @@ namespace School_Management_System.Migrations
                     b.HasOne("School_Management_System.Models.Department", "Department")
                         .WithMany("Courses")
                         .HasForeignKey("DepartmentID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_Course_Department");
 
                     b.HasOne("School_Management_System.Models.Teacher", "Teacher")
                         .WithMany("Courses")
                         .HasForeignKey("TeacherID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_Course_Teacher");
 

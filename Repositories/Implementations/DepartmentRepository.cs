@@ -28,7 +28,7 @@ namespace School_Management_System.Repositories.Implementations
             return db.Departments.Include(d => d.Teachers).Include(d => d.Courses)
                 .Select(d => new DepartmentViewModel
                 {
-                    DepartmentID = d.DepartmentID,
+                    Id = d.DepartmentID,
                     Name = d.Name,
                     TeacherCount = d.Teachers.Count,
                     CourseCount = d.Courses.Count
@@ -70,6 +70,21 @@ namespace School_Management_System.Repositories.Implementations
         public void ReseedTable(string tableName, int seedValue = 0)
         {
             throw new NotImplementedException();
+        }
+        public IEnumerable<Department> GetPagedAndFiltered(string? searchTerm, int pageNumber, int pageSize, out int totalCount)
+        {
+            var query = db.Departments.AsQueryable();
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(d => d.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+            }
+            totalCount = query.Count();
+            return query
+                .Include(d => d.Teachers)
+                .Include(d => d.Courses)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
         }
     }
 }
