@@ -1,28 +1,48 @@
-﻿@model School_Management_System.Models.Department
+﻿@model School_Management_System.ViewModel.DepartmentViewModel
 @{
-    ViewData["Title"] = "Edit Department";
+    ViewData["Title"] = "Edit";
+    SelectList teacherOptions = new SelectList(ViewBag.Teachers, "TeacherID", "Name");
+    SelectList courseOptions = new SelectList(ViewBag.Courses, "CourseID", "Name");
 }
 
-<h2 class="mb-4">✏️ Edit Department</h2>
+<h2 class="mb-4">✏ Update Department</h2>
 
 <div class="card shadow p-4">
-    <form asp-action="Edit" method="post">
-        <input type="hidden" asp-for="DepartmentID" />
+    <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="Id" />
 
         <div class="mb-3">
-            <label asp-for="Name" class="form-label fw-bold"></label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>
+            <div class="mb-3">
+                <label asp-for="Name"></label>
+                <input class="form form-control" asp-for="Name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
 
+            <label asp-for="TeacherId"></label>
+            <select class="form form-control" asp-for="TeacherId" asp-items="teacherOptions">
+                <option value="">--Select Teacher--</option>
+            </select>
+            <span asp-validation-for="TeacherId" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="CourseId"></label>
+            <select class="form form-control" asp-for="CourseId" asp-items="courseOptions">
+                <option value="">--Select Course--</option>
+            </select>
+            <span asp-validation-for="CourseId" class="text-danger"></span>
+        </div>
 
         <div class="d-flex justify-content-end mt-4">
-            <button type="submit" class="btn btn-primary me-2">💾 Save Changes</button>
-            <a asp-action="Index" class="btn btn-secondary">↩️ Cancel</a>
+            <button type="submit" class="btn btn-success me-2">💾 Save Changes</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
+
 </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+<!--client side!-->
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>

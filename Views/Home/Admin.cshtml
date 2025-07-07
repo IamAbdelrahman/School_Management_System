@@ -1,38 +1,272 @@
 ﻿@{
     ViewData["Title"] = "Admin Dashboard";
 }
-<div class="container mt-5">
-    <div class="text-center mb-4">
-        <h1 class="text-primary">Welcome to Admin Dashboard</h1>
-        <p class="lead">Manage the entire school system</p>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Dashboard - Future Gate</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="~/css/parent.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Floating particles background -->
+    <div class="particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 8s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 10s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 12s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 14s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 16s;"></div>
     </div>
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card shadow-lg border-start border-primary border-5">
-                <div class="card-body">
-                    <h5 class="card-title">Manage Teachers</h5>
-                    <p class="card-text">Add, update, or delete teacher records.</p>
-                    <a asp-controller="Teachers" asp-action="Index" class="btn btn-outline-primary w-100">Go</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card shadow-lg border-start border-success border-5">
-                <div class="card-body">
-                    <h5 class="card-title">Manage Students</h5>
-                    <p class="card-text">Enroll and monitor students' performance.</p>
-                    <a asp-controller="Students" asp-action="Index" class="btn btn-outline-success w-100">Go</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card shadow-lg border-start border-danger border-5">
-                <div class="card-body">
-                    <h5 class="card-title">Manage Courses</h5>
-                    <p class="card-text">Control course offerings and details.</p>
-                    <a asp-controller="Courses" asp-action="Index" class="btn btn-outline-danger w-100">Go</a>
-                </div>
+
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="text-center">
+                <h1><i class="bi bi-mortarboard-fill me-3"></i>Welcome to Admin Dashboard</h1>
+                <p class="lead">Add or update teachers, enroll and monitor students</p>
             </div>
         </div>
     </div>
-</div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Welcome Message -->
+        <div class="welcome-message">
+            <div class="content">
+                <h4><i class="bi bi-calendar-check me-2"></i>Good day, Admin!</h4>
+                <p class="mb-0">Ready to manage the entire school system</p>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-section">
+            <h3 class="text-center mb-4 fw-bold">Quick Overview</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="stat-item">
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">Active Courses</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-item">
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">Completed Exams</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-item">
+                        <div class="stat-number">85%</div>
+                        <div class="stat-label">Average Score</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-item">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Pending Results</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="row g-4 mt-4">
+            <div class="col-lg-6">
+                <div class="card dashboard-card success-card card-animation">
+                    <div class="card-body">
+                        <div class="dashboard-icon success-icon">
+                            <i class="bi bi-book-fill"></i>
+                        </div>
+                        <h5 class="card-title">My Courses</h5>
+                        <p class="card-text">Browse your active course enrollments and track your learning progress. Access course materials, assignments, and upcoming deadlines.</p>
+                        <a asp-controller="Courses" asp-action="Index" class="btn btn-outline-danger w-100">
+                            <i class="bi bi-eye me-2"></i>View Courses
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card dashboard-card secondary-card card-animation">
+                    <div class="card-body">
+                        <div class="dashboard-icon secondary-icon">
+                            <i class="bi bi-trophy-fill"></i>
+                        </div>
+                        <h5 class="card-title">Manage Exam Results</h5>
+                        <p class="card-text">View, update, and manage student grades and performance across all subjects. Access detailed feedback and monitor academic progress for all students.</p>
+                        <a asp-controller="ExamResults" asp-action="Index" class="btn btn-outline-success w-100">
+                            <i class="bi bi-bar-chart-line me-2"></i>Manage Results
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Additional Management Cards -->
+        <div class="row g-4 mt-4">
+            <div class="col-lg-6">
+                <div class="card dashboard-card card-animation">
+                    <div class="card-body">
+                        <div class="dashboard-icon" style="background: var(--primary-gradient); box-shadow: 0 10px 30px rgba(0, 123, 255, 0.2);">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <h5 class="card-title">Manage Students</h5>
+                        <p class="card-text">Add, update, or remove students. Monitor student enrollment and progress.</p>
+                        <a asp-controller="Students" asp-action="Index" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-person-lines-fill me-2"></i>Manage Students
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card dashboard-card card-animation">
+                    <div class="card-body">
+                        <div class="dashboard-icon" style="background: var(--success-gradient); box-shadow: 0 10px 30px rgba(40, 167, 69, 0.2);">
+                            <i class="bi bi-person-badge-fill"></i>
+                        </div>
+                        <h5 class="card-title">Manage Teachers</h5>
+                        <p class="card-text">Add, update, or remove teachers. Assign teachers to courses and manage their profiles.</p>
+                        <a asp-controller="Teachers" asp-action="Index" class="btn btn-outline-success w-100">
+                            <i class="bi bi-person-workspace me-2"></i>Manage Teachers
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Additional Features -->
+        <div class="row g-4 mt-4">
+            <div class="col-lg-4">
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <div class="dashboard-icon" style="background: var(--warning-gradient); box-shadow: 0 10px 30px rgba(252, 182, 159, 0.3);">
+                            <i class="bi bi-calendar-event"></i>
+                        </div>
+                        <h5 class="card-title">Schedule</h5>
+                        <p class="card-text">View your class timetable and important dates.</p>
+                        <a href="#" class="btn dashboard-btn w-100" style="background: var(--warning-gradient); box-shadow: 0 10px 30px rgba(252, 182, 159, 0.3);">
+                            <i class="bi bi-calendar me-2"></i>View Schedule
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <div class="dashboard-icon" style="background: var(--info-gradient); box-shadow: 0 10px 30px rgba(161, 196, 253, 0.3);">
+                            <i class="bi bi-chat-dots"></i>
+                        </div>
+                        <h5 class="card-title">Messages</h5>
+                        <p class="card-text">Communication with teachers and classmates.</p>
+                        <a href="#" class="btn dashboard-btn w-100" style="background: var(--info-gradient); box-shadow: 0 10px 30px rgba(161, 196, 253, 0.3);">
+                            <i class="bi bi-envelope me-2"></i>View Messages
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <div class="dashboard-icon" style="background: var(--danger-gradient); box-shadow: 0 10px 30px rgba(255, 154, 158, 0.3);">
+                            <i class="bi bi-gear"></i>
+                        </div>
+                        <h5 class="card-title">Settings</h5>
+                        <p class="card-text">Manage your profile and preferences.</p>
+                        <a href="#" class="btn dashboard-btn w-100" style="background: var(--danger-gradient); box-shadow: 0 10px 30px rgba(255, 154, 158, 0.3);">
+                            <i class="bi bi-sliders me-2"></i>Manage Settings
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- Footer spacing -->
+    <div style="height: 100px;"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add scroll animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'slideInUp 0.8s ease-out';
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.dashboard-card').forEach(card => {
+                observer.observe(card);
+            });
+
+            // Add hover sound effect simulation
+            document.querySelectorAll('.dashboard-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-15px) scale(1.02)';
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Add click ripple effect
+            document.querySelectorAll('.dashboard-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.style.position = 'absolute';
+                    ripple.style.borderRadius = '50%';
+                    ripple.style.background = 'rgba(255, 255, 255, 0.5)';
+                    ripple.style.pointerEvents = 'none';
+                    ripple.style.animation = 'ripple 0.6s ease-out';
+
+                    this.style.position = 'relative';
+                    this.appendChild(ripple);
+
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+        });
+
+        // Add ripple animation style
+        // const style = document.createElement('style');
+        // style.textContent = `
+        //     ripple {
+        //         0% {
+        //             transform: scale(0);
+        //             opacity: 1;
+        //         }
+        //         100% {
+        //             transform: scale(1);
+        //             opacity: 0;
+        //         }
+        //     }
+        // `;
+        // document.head.appendChild(style);
+    </script>
+</body>
+</html>

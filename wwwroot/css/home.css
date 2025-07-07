@@ -1,4 +1,4 @@
-﻿body {
+﻿/*body {
     background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
     color: white;
     font-family: 'Segoe UI', sans-serif;
@@ -92,4 +92,286 @@
     to {
         opacity: 1;
     }
+}
+*/
+
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+}
+
+/* Enhanced Carousel Styles */
+.carousel-item {
+    position: relative;
+    overflow: hidden;
+    height: 70vh;
+}
+
+    .carousel-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 8s ease-in-out;
+        filter: brightness(0.7);
+    }
+
+    .carousel-item.active img {
+        transform: scale(1.1);
+        animation: smoothZoom 8s ease-in-out infinite alternate;
+    }
+
+@keyframes smoothZoom {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1.2);
+    }
+}
+
+.carousel-caption {
+    bottom: 30%;
+/*    background: rgba(0, 0, 0, 0.3);*/
+/*    backdrop-filter: blur(10px);*/
+    padding: 2rem;
+    border-radius: 20px;
+/*    border: 1px solid rgba(255, 255, 255, 0.1);*/
+    animation: slideUpFade 1s ease-out;
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.carousel-caption h1 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    text-shadow: 2px 2px 20px rgba(0,0,0,0.8);
+    background: linear-gradient(135deg, #fff, #f8f9fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+}
+
+.carousel-caption .btn {
+    font-size: 1.3rem;
+    padding: 15px 35px;
+    font-weight: 700;
+    border-radius: 50px;
+    border: none;
+    background: var(--warning-gradient);
+    color: white;
+    text-shadow: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+    .carousel-caption .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    .carousel-caption .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left 0.7s ease;
+    }
+
+    .carousel-caption .btn:hover::before {
+        left: 100%;
+    }
+
+/* Enhanced Hover Cards */
+.hover-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+    .hover-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 1;
+    }
+
+    .hover-card:hover::before {
+        opacity: 1;
+    }
+
+    .hover-card:hover {
+        transform: translateY(-15px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .hover-card .card-body {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Animated Icons */
+    .hover-card i {
+        transition: all 0.3s ease;
+    }
+
+    .hover-card:hover i {
+        transform: scale(1.2) rotate(5deg);
+    }
+
+/* Section Styling */
+section {
+    position: relative;
+}
+
+.bg-gradient-primary {
+    background: var(--primary-gradient);
+    color: white;
+}
+
+.bg-gradient-secondary {
+    background: var(--secondary-gradient);
+    color: white;
+}
+
+/* Floating Animation */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.float-animation {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Enhanced Pricing Cards */
+.pricing-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 25px;
+    border: 2px solid transparent;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+    .pricing-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #f5576c);
+        z-index: -1;
+        transition: opacity 0.3s ease;
+        opacity: 0;
+    }
+
+    .pricing-card:hover::before {
+        opacity: 1;
+    }
+
+    .pricing-card:hover {
+        transform: translateY(-10px) scale(1.05);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        color: white;
+    }
+
+/* Glowing Effect */
+.glow-effect {
+    position: relative;
+}
+
+    .glow-effect::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at center, rgba(102, 126, 234, 0.3), transparent 70%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+
+    .glow-effect:hover::after {
+        opacity: 1;
+    }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .carousel-caption h1 {
+        font-size: 2rem;
+    }
+
+    .carousel-caption .btn {
+        font-size: 1rem;
+        padding: 12px 24px;
+    }
+}
+
+/* Custom Carousel Controls */
+.carousel-control-prev,
+.carousel-control-next {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-50%) scale(1.1);
+    }
+
+.carousel-control-prev {
+    left: 30px;
+}
+
+.carousel-control-next {
+    right: 30px;
 }
