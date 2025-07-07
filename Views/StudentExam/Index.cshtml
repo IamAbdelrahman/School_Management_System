@@ -1,20 +1,19 @@
-﻿@model List<School_Management_System.ViewModel.CourseViewModel>
+﻿@model List<StudentExam>
 
 @{
-    ViewData["Title"] = "Index";
-
-    var searchTerm = ViewBag.SearchTerm as string;
-    var pageNumber = (int)ViewBag.PageNumber;
-    var totalPages = (int)ViewBag.TotalPages;
+    ViewData["Title"] = "Student Exams";
+    int pageNumber = ViewBag.PageNumber ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+    string searchTerm = ViewBag.SearchTerm as string ?? "";
 }
 
-<h2 class="mb-4">📝 Courses</h2>
+<h2 class="mb-4">📋 Student Exams</h2>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <a asp-action="Create" asp-controller="Courses" class="btn btn-success">➕ Add New Course</a>
+    <a asp-action="Create" class="btn btn-success">➕ Add New Student Exam</a>
 
-    <form method="get" asp-action="Index" asp-controller="Courses" class="d-flex" role="search">
-        <input type="text" name="searchTerm" class="form-control me-2 w-100" placeholder="🔍 Search by Name" value="@searchTerm" />
+    <form method="get" asp-action="Index" class="d-flex" role="search">
+        <input type="text" name="searchTerm" class="form-control me-2" placeholder="🔍 Search by Student, Exam, Grade..." value="@searchTerm" />
         <button type="submit" class="btn btn-outline-primary">Search</button>
     </form>
 </div>
@@ -23,9 +22,9 @@
     <thead class="table-dark text-center">
         <tr>
             <th>#</th>
-            <th>Course Name</th>
-            <th>Department ID</th>
-            <th>Teacher ID</th>
+            <th>Student</th>
+            <th>Exam</th>
+            <th>Grade</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -33,21 +32,21 @@
         @if (Model != null && Model.Any())
         {
             int i = 1 + (pageNumber - 1) * 5;
-            foreach (var c in Model)
+            foreach (var item in Model)
             {
                 <tr class="align-middle text-center">
-                    <td>@c.Id</td>
-                    <td>@c.Title</td>
-                    <td>@c.TeacherId</td>
-                    <td>@c.DepartmentId</td>
+                    <td>@i</td>
+                    <td>@item.Student.Name </td>
+                    <td>@item.Exam.Type </td>
+                    <td>@(item.StudentGrade )</td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-info btn-sm mx-1">
+                        <a asp-action="Details" asp-route-id="@item.StudentExamID" class="btn btn-info btn-sm mx-1">
                             <i class="bi bi-eye"></i> View
                         </a>
-                        <a asp-action="Edit" asp-route-id="@c.Id" class="btn btn-warning btn-sm mx-1">
+                        <a asp-action="Edit" asp-route-id="@item.StudentExamID" class="btn btn-warning btn-sm mx-1">
                             <i class="bi bi-pencil-square"></i> Edit
                         </a>
-                        <a asp-action="Delete" asp-route-id="@c.Id" class="btn btn-danger btn-sm mx-1">
+                        <a asp-action="Delete" asp-route-id="@item.StudentExamID" class="btn btn-danger btn-sm mx-1">
                             <i class="bi bi-trash"></i> Delete
                         </a>
                     </td>
@@ -58,12 +57,11 @@
         else
         {
             <tr>
-                <td colspan="6" class="text-center text-muted">No enrollments yet.</td>
+                <td colspan="5" class="text-center text-muted">No student exams found.</td>
             </tr>
         }
     </tbody>
 </table>
-
 
 @if (totalPages > 1)
 {

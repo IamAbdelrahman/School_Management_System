@@ -1,0 +1,44 @@
+﻿@model StudentExamViewModel
+
+@{
+    ViewData["Title"] = "✏️ Edit Student Exam";
+}
+
+<h2 class="mb-4">✏️ Edit Student Exam</h2>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="StudentExamID" />
+
+            <div class="mb-3">
+                <label asp-for="StudentID" class="form-label">Student</label>
+                <select asp-for="StudentID" asp-items="Model.Students" class="form-select">
+                    <option value="">Select Student</option>
+                </select>
+                <span asp-validation-for="StudentID" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ExamID" class="form-label">Exam</label>
+                <select asp-for="ExamID" asp-items="Model.Exams" class="form-select">
+                    <option value="">Select Exam</option>
+                </select>
+                <span asp-validation-for="ExamID" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="StudentGrade" class="form-label">Student Grade</label>
+                <input asp-for="StudentGrade" class="form-control" type="number" step="0.1" />
+                <span asp-validation-for="StudentGrade" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

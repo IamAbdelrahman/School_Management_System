@@ -12,7 +12,10 @@
                 <div class="card-body">
                     <h5 class="card-title">My Courses</h5>
                     <p class="card-text">See the list of courses you teach.</p>
-                    <a asp-controller="Courses" asp-action="MyCourses" class="btn btn-info w-100">View Courses</a>
+                    @{
+                        var id = Context.Session.GetInt32("Code");
+                    }
+                    <a asp-controller="Teachers" asp-action="Details" asp-route-id="@(id)" class="btn btn-info w-100">View Courses</a>
                 </div>
             </div>
         </div>

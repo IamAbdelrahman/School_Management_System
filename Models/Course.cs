@@ -14,7 +14,7 @@ public partial class Course
     public int CourseID { get; set; }
 
     [Required(ErrorMessage = "Course name is required")]
-    [StringLength(30, MinimumLength = 3, ErrorMessage = "Course name must be between 3 and 100 characters")] 
+    [StringLength(30, MinimumLength = 3, ErrorMessage = "Course name must be between 3 and 100 characters")]
     public string Name { get; set; }
 
     [Required(ErrorMessage = "Description is required")]

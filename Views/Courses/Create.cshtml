@@ -1,39 +1,52 @@
-﻿@model CourseViewModel
+﻿@model School_Management_System.ViewModel.CourseViewModel
+@{
+    ViewData["Title"] = "Create";
+    SelectList teacherOptions = new SelectList(ViewBag.Teachers, "TeacherID", "Name");
+    SelectList deptOptions = new SelectList(ViewBag.Departments, "DepartmentID", "Name");
 
-<h1>@ViewData["Title"]</h1>
 
-<form asp-action=@ViewData["Action"]>
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+}
 
-    <div class="form-group">
-        <label asp-for="Title" class="control-label"></label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
-    </div>
+<h2 class="mb-4">➕ Add New Course</h2>
 
-    <div class="form-group">
-        <label asp-for="Description" class="control-label"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
+<form method="post" asp-action="Save" asp-controller="Courses">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="mb-3">
+                <div class="mb-3">
+                    <label asp-for="Title"></label>
+                    <input class="form form-control" asp-for="Title" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Description"></label>
+                    <input class="form form-control" asp-for="Description" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <label asp-for="TeacherId"></label>
+                <select class="form form-control" asp-for="TeacherId" asp-items="teacherOptions">
+                    <option value="">--Select Teacher--</option>
+                </select>
+                <span asp-validation-for="TeacherId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DepartmentId"></label>
+                <select class="form form-control" asp-for="DepartmentId" asp-items="deptOptions">
+                    <option value="">--Select Department--</option>
+                </select>
+                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label asp-for="DepartmentId" class="control-label"></label>
-        <select asp-for="DepartmentId" asp-items="@(new SelectList(ViewBag.Departments, "Id", "Name"))" class="form-control">
-            <option value="">-- Select Department --</option>
-        </select>
-        <span asp-validation-for="DepartmentId" class="text-danger"></span>
-    </div>
 
-    <div class="form-group">
-        <label asp-for="TeacherId" class="control-label"></label>
-        <select asp-for="TeacherId" asp-items="@(new SelectList(ViewBag.Teachers, "Id", "FullName"))" class="form-control">
-            <option value="">-- Select Teacher --</option>
-        </select>
-        <span asp-validation-for="TeacherId" class="text-danger"></span>
-    </div>
 
-    <div class="form-group">
-        <input type="submit" value="Save" class="btn btn-primary" />
+            <button type="submit" class="btn btn-success">Create</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
     </div>
 </form>
+
+<!--client side!-->
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>

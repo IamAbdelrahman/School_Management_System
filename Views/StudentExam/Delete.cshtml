@@ -1,0 +1,43 @@
+﻿@model StudentExam
+
+@{
+    ViewData["Title"] = "🗑️ Delete Student Exam";
+    bool canDelete = ViewBag.CanDelete ?? false;
+}
+
+<h2 class="mb-4 text-danger">🗑️ Delete Student Exam</h2>
+
+<div class="card border-danger shadow-sm">
+    <div class="card-body">
+
+        @if (!canDelete)
+        {
+            <div class="alert alert-warning">
+                ❌ You cannot delete this student exam because it is referenced by other data.
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-danger">
+                Are you sure you want to delete this student exam? This action cannot be undone.
+            </div>
+        }
+
+        <dl class="row">
+            <dt class="col-sm-3">Student</dt>
+            <dd class="col-sm-9">@Model.Student.Name</dd>
+
+            <dt class="col-sm-3">Exam</dt>
+            <dd class="col-sm-9">@Model.Exam.Type</dd>
+
+            <dt class="col-sm-3">Student Grade</dt>
+            <dd class="col-sm-9">@Model.StudentGrade</dd>
+        </dl>
+
+        <form asp-action="Delete" asp-route-id="@Model.StudentExamID" method="post">
+            <input type="hidden" asp-for="StudentExamID" />
+            <button type="submit" class="btn btn-danger" @(canDelete ? "" : "disabled")>Delete</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

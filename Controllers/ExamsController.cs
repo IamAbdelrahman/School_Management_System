@@ -7,7 +7,7 @@ using School_Management_System.ViewModel;
 
 namespace School_Management_System.Controllers
 {
-    [Authorize(Roles = "Admin,Teacher")]
+    [Authorize(Roles = "Admin,Teacher, Parent")]
     public class ExamsController : Controller
     {
         private readonly IExamRepository _examRepo;
